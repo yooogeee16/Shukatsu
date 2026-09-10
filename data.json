@@ -40,6 +40,21 @@
       "esDeadline": "",
       "interviewDate": "",
       "memo": "従業員数2,882人。有価証券報告書ベース（2025年07月時点）の平均年収・平均年齢は概数"
+    },
+    {
+      "id": "seed-asahi",
+      "name": "朝日新聞社",
+      "industry": "マスコミ・新聞／メディア",
+      "mypageUrl": "https://mypage.3030.i-webs.jp/asahishimbun2028/applicant/top/index/pra/bhijaebdec-bjfj",
+      "salaryStart": "248730",
+      "annualSalary": "1147",
+      "avgAge": "46.8",
+      "holidays": "107",
+      "holidayDetail": "完全週休2日制、実働7時間、年次有給休暇27日（入社初年度から付与）",
+      "status": "インターン参加",
+      "esDeadline": "",
+      "interviewDate": "",
+      "memo": "初任給は総合職(リクナビ2024ベース)。年収・平均年齢は全社員平均(有価証券報告書ベース)で新卒とは異なる。人事(滝本さん)から個別会社説明のスカウト連絡あり、日程調整中（7/17以降の平日希望）"
     }
   ],
   "interns": [
@@ -49,6 +64,14 @@
       "period": "",
       "date": "",
       "content": "RAG（検索拡張生成）構築体験ワークショップ。独自の知識を持つAIを構築。RAGの仕組みやLLMの基礎を学び、AIエンジニアの業務を体感するワークショップ。",
+      "learning": ""
+    },
+    {
+      "id": "seed-asahi-eng1day",
+      "company": "朝日新聞社",
+      "period": "",
+      "date": "2026-08-22",
+      "content": "エンジニアコース1day。日程：8月22日(土)10:00〜18:00（9:45受付開始）。会場：朝日新聞大阪本社（大阪市北区中之島2-3-18）。",
       "learning": ""
     }
   ],
