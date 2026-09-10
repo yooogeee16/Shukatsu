@@ -38,7 +38,8 @@
   thead th{text-align:left; padding:9px 10px; background:var(--primary); color:#fff; font-weight:500; cursor:pointer; user-select:none; white-space:nowrap;}
   thead th:hover{background:var(--primary-soft);}
   thead th .arrow{font-size:11px; margin-left:3px; opacity:.85;}
-  tbody td{padding:9px 10px; border-bottom:1px solid var(--paper-line); vertical-align:top;}
+  tbody td{padding:9px 10px; border-bottom:1px solid var(--paper-line); vertical-align:top; white-space:nowrap; max-width:260px; overflow:hidden; text-overflow:ellipsis;}
+  tbody td.wrap{white-space:normal; max-width:none;}
   tbody tr:hover{background:#f8f5ee;}
   .table-wrap{overflow-x:auto; border:1px solid var(--paper-line); border-radius:4px;}
   .company-link{color:var(--primary); font-weight:700; text-decoration:none; border-bottom:1px solid var(--primary-soft);}
