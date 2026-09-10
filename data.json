@@ -25,9 +25,33 @@
       "esDeadline": "",
       "interviewDate": "",
       "memo": "従業員数207,548人"
+    },
+    {
+      "id": "seed-members",
+      "name": "株式会社メンバーズ",
+      "industry": "インターネット関連・Web／ソフトウェア・情報処理",
+      "mypageUrl": "",
+      "salaryStart": "255000",
+      "annualSalary": "491",
+      "avgAge": "30",
+      "holidays": "121",
+      "holidayDetail": "完全週休2日制",
+      "status": "インターン参加",
+      "esDeadline": "",
+      "interviewDate": "",
+      "memo": "従業員数2,882人。有価証券報告書ベース（2025年07月時点）の平均年収・平均年齢は概数"
     }
   ],
-  "interns": [],
+  "interns": [
+    {
+      "id": "seed-members-rag",
+      "company": "株式会社メンバーズ",
+      "period": "",
+      "date": "",
+      "content": "RAG（検索拡張生成）構築体験ワークショップ。独自の知識を持つAIを構築。RAGの仕組みやLLMの基礎を学び、AIエンジニアの業務を体感するワークショップ。",
+      "learning": ""
+    }
+  ],
   "quals": [
     {
       "id": "seed-toeic",
