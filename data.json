@@ -11,14 +11,42 @@
   },
   "industries": [],
   "companies": [
-    { "id": "seed-panasonic", "name": "パナソニックグループ", "industry": "機械／ソフトウェア・情報処理／電気・電子機器／半導体・電子部品／家電・AV機器", "mypageUrl": "", "salaryStart": "", "annualSalary": "", "avgAge": "", "holidays": "", "holidayDetail": "", "status": "未応募", "esDeadline": "", "interviewDate": "", "memo": "従業員数207,548人" },
-    { "id": "seed-capcom", "name": "カプコン", "industry": "ゲーム（情報・サービス）／ソフトウェア", "mypageUrl": "", "salaryStart": "300000", "annualSalary": "919", "avgAge": "38", "holidays": "121", "holidayDetail": "完全週休2日制（土日）＋祝日、有給消化率73.3%", "status": "未応募", "esDeadline": "", "interviewDate": "", "memo": "大阪本社。学歴・職種問わず初任給一律30万円。月平均残業11.4時間、自己都合離職率2.2%（2025年3月期・有価証券報告書ベース）" }
+    {
+      "id": "seed-panasonic",
+      "name": "パナソニックグループ",
+      "industry": "機械／ソフトウェア・情報処理／電気・電子機器／半導体・電子部品／家電・AV機器",
+      "mypageUrl": "",
+      "salaryStart": "",
+      "annualSalary": "",
+      "avgAge": "",
+      "holidays": "",
+      "holidayDetail": "",
+      "status": "未応募",
+      "esDeadline": "",
+      "interviewDate": "",
+      "memo": "従業員数207,548人"
+    }
   ],
   "interns": [],
   "quals": [
-    { "id": "seed-toeic", "name": "TOEIC", "date": "", "note": "795点" },
-    { "id": "seed-kihon", "name": "基本情報技術者試験", "date": "", "note": "取得" },
-    { "id": "seed-itpass", "name": "ITパスポート", "date": "", "note": "取得" }
+    {
+      "id": "seed-toeic",
+      "name": "TOEIC",
+      "date": "",
+      "note": "795点"
+    },
+    {
+      "id": "seed-kihon",
+      "name": "基本情報技術者試験",
+      "date": "",
+      "note": "取得"
+    },
+    {
+      "id": "seed-itpass",
+      "name": "ITパスポート",
+      "date": "",
+      "note": "取得"
+    }
   ],
   "activities": []
 }
