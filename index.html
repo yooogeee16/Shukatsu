@@ -63,6 +63,16 @@
   .cal-legend{display:flex; gap:16px; margin:14px 0 6px; font-size:12.5px; color:var(--ink-soft); align-items:center;}
   .cal-legend span{display:inline-flex; align-items:center; gap:5px;}
   .cal-legend i{width:10px; height:10px; border-radius:2px; display:inline-block;}
+  .dc-row{margin-bottom:16px;}
+  .dc-row:last-child{margin-bottom:0;}
+  .dc-label{font-family:'Noto Serif JP',serif; font-weight:700; color:var(--primary); font-size:13px; margin-bottom:8px; padding-left:10px; border-left:3px solid var(--accent);}
+  .dc-chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .dc-chip{background:#fff; border:1px solid var(--paper-line); border-radius:20px; padding:6px 14px; font-size:13px; color:var(--ink); white-space:nowrap;}
+  .dc-chip b{color:var(--primary); margin-right:5px; font-weight:700;}
+  .dc-chip.rank-1{border-color:var(--accent); background:#fdf6ea;}
+  .dc-chip.rank-1 b{color:var(--accent);}
+  .dc-chip.rank-2{border-color:var(--primary-soft);}
+  .dc-chip.rank-3{border-color:var(--paper-line); opacity:.85;}
   @media (max-width:760px){
     .app{flex-direction:column;}
     .sidebar{width:100%; flex-direction:row; overflow-x:auto; padding:14px 12px; gap:6px;}
@@ -155,12 +165,32 @@ function renderSelf(){
   `;
 }
 
+function renderDesiredConditions(text){
+  if(!text) return '<p class="body"><span class="muted">未入力</span></p>';
+  const lines = text.split('\n').filter(Boolean);
+  return lines.map(line=>{
+    const m = line.match(/^【(.+?)】(.*)$/);
+    if(!m) return `<div class="dc-row"><div class="dc-chips"><span class="dc-chip">${esc(line)}</span></div></div>`;
+    const label = m[1];
+    const rest = m[2];
+    const parts = rest.split('／').map(p=>p.trim()).filter(Boolean);
+    const chips = parts.map(p=>{
+      const pm = p.match(/^(第[一二三四五]志望)[:：](.*)$/);
+      if(pm){
+        const rankClass = pm[1]==='第一志望' ? 'rank-1' : pm[1]==='第二志望' ? 'rank-2' : 'rank-3';
+        return `<span class="dc-chip ${rankClass}"><b>${esc(pm[1])}</b>${esc(pm[2])}</span>`;
+      }
+      return `<span class="dc-chip">${esc(p)}</span>`;
+    }).join('');
+    return `<div class="dc-row"><div class="dc-label">${esc(label)}</div><div class="dc-chips">${chips}</div></div>`;
+  }).join('');
+}
 function renderIndustry(){
   const s = data.self || {};
   const list = data.industries || [];
   return `
   <div class="section-head"><h1>志望業界</h1><p>興味のある業界と志望条件</p></div>
-  <div class="card"><h3>志望条件まとめ</h3><p class="body">${s.desiredConditions ? nl2br(s.desiredConditions) : '<span class="muted">未入力</span>'}</p></div>
+  <div class="card"><h3>志望条件まとめ</h3>${renderDesiredConditions(s.desiredConditions)}</div>
   ${list.length===0 ? '' : list.map(i=>`
     <div class="card"><h3>${esc(i.name)}</h3><p class="body">${nl2br(i.note)}</p></div>
   `).join('')}
