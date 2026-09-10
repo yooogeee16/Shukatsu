@@ -201,14 +201,13 @@ const STATUS_LABEL = {};
 const COL_DEFS = [
   {key:'name', label:'企業名', type:'text'},
   {key:'industry', label:'業界', type:'text'},
+  {key:'location', label:'勤務地', type:'text'},
   {key:'salaryStart', label:'院卒初任給(月給/円)', type:'num'},
   {key:'annualSalary', label:'平均年収(万円)', type:'num'},
   {key:'avgAge', label:'平均年齢(歳)', type:'num'},
   {key:'holidays', label:'年間休日(日)', type:'num'},
   {key:'holidayDetail', label:'休日内訳', type:'text'},
   {key:'status', label:'選考状況', type:'text'},
-  {key:'esDeadline', label:'ES締切', type:'text'},
-  {key:'interviewDate', label:'次の面接日程', type:'text'},
   {key:'memo', label:'メモ', type:'text'},
 ];
 
@@ -225,14 +224,13 @@ function renderCompany(){
     <tr>
       <td>${c.mypageUrl ? `<a class="company-link" href="${esc(c.mypageUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
       <td>${esc(c.industry)}</td>
+      <td>${esc(c.location)}</td>
       <td>${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
       <td>${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
       <td>${c.avgAge || ''}</td>
       <td>${c.holidays || ''}</td>
       <td>${esc(c.holidayDetail)}</td>
       <td>${statusPill(c.status)}</td>
-      <td>${esc(c.esDeadline)}</td>
-      <td>${esc(c.interviewDate)}</td>
       <td>${esc(c.memo)}</td>
     </tr>
   `).join('');
@@ -242,7 +240,7 @@ function renderCompany(){
     <thead><tr>
       ${COL_DEFS.map(c=>`<th data-sort="${c.key}">${c.label}${sort.key===c.key ? `<span class="arrow">${sort.dir==='asc'?'▲':'▼'}</span>`:''}</th>`).join('')}
     </tr></thead>
-    <tbody>${rows || `<tr><td colspan="11"><div class="empty">まだ企業が登録されてない</div></td></tr>`}</tbody>
+    <tbody>${rows || `<tr><td colspan="10"><div class="empty">まだ企業が登録されてない</div></td></tr>`}</tbody>
   </table></div>
   `;
 }
@@ -290,10 +288,6 @@ function renderSkill(){
 function pad(n){ return n.toString().padStart(2,'0'); }
 function collectEvents(){
   const evts = [];
-  (data.companies||[]).forEach(c=>{
-    if(c.esDeadline) evts.push({date:c.esDeadline, label:`${c.name} ES締切`, type:'deadline'});
-    if(c.interviewDate) evts.push({date:c.interviewDate, label:`${c.name} 面接`, type:'interview'});
-  });
   (data.interns||[]).forEach(i=>{ if(i.date) evts.push({date:i.date, label:`${i.company} インターン`, type:'intern'}); });
   return evts;
 }
