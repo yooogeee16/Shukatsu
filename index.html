@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="就活ノート">
+<meta name="theme-color" content="#333a42">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232f4159'/%3E%3Ctext x='50' y='63' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif'%3E就%3C/text%3E%3C/svg%3E">
+<title>就活ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#333a42;
+    --paper:#faf7f0;
+    --paper-line:#e4ded0;
+    --ink:#24211d;
+    --ink-soft:#686253;
+    --primary:#2f4159;
+    --primary-soft:#4d5f78;
+    --accent:#b8862e;
+    --danger:#a63d40;
+    --good:#3f6b4a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:"Noto Sans JP",sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:"Noto Serif JP",serif; margin:0 0 .4em 0; font-weight:700;}
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
+  /* サイドバー：ノートのインデックスタブ風 */
+  .sidebar{
+    width:180px;
+    flex-shrink:0;
+    padding:28px 0 28px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .sidebar .brand{
+    color:#f2ede0;
+    font-family:"Noto Serif JP",serif;
+    font-size:19px;
+    font-weight:700;
+    padding:0 8px 20px 6px;
+    line-height:1.5;
+    border-bottom:1px solid #4a515a;
+    margin-bottom:8px;
+  }
+  .tab-btn{
+    text-align:left;
+    border:none;
+    cursor:pointer;
+    padding:13px 16px;
+    font-family:"Noto Sans JP",sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    color:#d8d3c4;
+    background:transparent;
+    border-radius:8px 0 0 8px;
+    transition:background .15s, color .15s;
+    letter-spacing:.02em;
+  }
+  .tab-btn:hover{background:#3d4550; color:#fff;}
+  .tab-btn.active{
+    background:var(--paper);
+    color:var(--primary);
+    font-weight:700;
+  }
+  .main{
+    flex:1;
+    background:var(--paper);
+    background-image: repeating-linear-gradient(to bottom, transparent 0 38px, var(--paper-line) 38px 39px);
+    padding:36px 44px 60px;
+    min-width:0;
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .section-head p{margin:2px 0 0; color:var(--ink-soft); font-size:13.5px;}
+  .card{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:20px 22px;
+    margin-bottom:18px;
+    box-shadow:0 1px 0 rgba(0,0,0,.03);
+  }
+  .card h3{font-size:15.5px; color:var(--primary);}
+  label{
+    display:block;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:10px 0 4px;
+    font-weight:500;
+  }
+  textarea, input[type=text], input[type=number], input[type=url], input[type=date], select{
+    width:100%;
+    font-family:"Noto Sans JP",sans-serif;
+    font-size:14px;
+    padding:8px 10px;
+    border:1px solid #d6d0c1;
+    border-radius:4px;
+    background:#fffdf9;
+    color:var(--ink);
+  }
+  textarea{resize:vertical; min-height:70px; line-height:1.6;}
+  input:focus, textarea:focus, select:focus{outline:2px solid var(--primary-soft); outline-offset:1px;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border:none;
+    cursor:pointer;
+    font-family:"Noto Sans JP",sans-serif;
+    font-size:13.5px;
+    font-weight:700;
+    padding:8px 16px;
+    border-radius:4px;
+    background:var(--primary);
+    color:#fff;
+    transition:background .15s;
+  }
+  .btn:hover{background:var(--primary-soft);}
+  .btn.ghost{background:transparent; color:var(--primary); border:1px solid var(--primary); font-weight:500;}
+  .btn.ghost:hover{background:#eef1f5;}
+  .btn.danger{background:transparent; color:var(--danger); font-weight:500; padding:6px 10px;}
+  .btn.danger:hover{background:#fbeceb;}
+  .btn.small{padding:5px 10px; font-size:12.5px;}
+  .row{display:flex; gap:14px; flex-wrap:wrap;}
+  .row > div{flex:1; min-width:160px;}
+  .item-block{
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:16px 18px;
+    margin-bottom:14px;
+    background:#fffdf9;
+    position:relative;
+  }
+  .item-block-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px;
+  }
+  .qa-pair{
+    border-left:3px solid var(--accent);
+    padding:6px 0 6px 12px;
+    margin:8px 0;
+  }
+  .qa-pair .q{font-weight:700; font-size:13.5px; color:var(--primary);}
+  .qa-pair .a{font-size:13.5px; color:var(--ink); margin-top:2px; white-space:pre-wrap;}
+  .muted{color:var(--ink-soft); font-size:13px;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    background:#fff;
+  }
+  thead th{
+    text-align:left;
+    padding:9px 10px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:500;
+    cursor:pointer;
+    user-select:none;
+    white-space:nowrap;
+    position:relative;
+  }
+  thead th:hover{background:var(--primary-soft);}
+  thead th .arrow{font-size:11px; margin-left:3px; opacity:.85;}
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--paper-line);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:#f8f5ee;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--paper-line); border-radius:4px;}
+  .company-link{color:var(--primary); font-weight:700; text-decoration:none; border-bottom:1px solid var(--primary-soft);}
+  .company-link:hover{color:var(--accent); border-color:var(--accent);}
+  .status-pill{
+    display:inline-block;
+    padding:2px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+    background:#eef1f5;
+    color:var(--primary);
+    white-space:nowrap;
+  }
+  .status-pill.offer{background:#eef4ee; color:var(--good);}
+  .status-pill.reject{background:#fbeceb; color:var(--danger);}
+  .toolbar{display:flex; justify-content:flex-end; margin-bottom:12px; gap:10px;}
+  .empty{
+    text-align:center;
+    color:var(--ink-soft);
+    padding:30px 10px;
+    border:1px dashed var(--paper-line);
+    border-radius:4px;
+    font-size:13.5px;
+  }
+  .save-msg{font-size:12px; color:var(--good); margin-left:8px; opacity:0; transition:opacity .3s;}
+  .save-msg.show{opacity:1;}
+  form.inline-form{display:none;}
+  form.inline-form.open{display:block;}
+  .cal-head{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+  .cal-head h2{font-family:"Noto Serif JP",serif; color:var(--primary); font-size:20px; min-width:130px;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); border:1px solid var(--paper-line); background:var(--paper-line); gap:1px;}
+  .cal-dow{background:var(--primary); color:#fff; text-align:center; padding:6px 0; font-size:12.5px; font-weight:700;}
+  .cal-cell{background:#fff; min-height:88px; padding:5px 6px; font-size:12px;}
+  .cal-cell.blank{background:#f4f1ea;}
+  .cal-cell .daynum{font-weight:700; color:var(--ink-soft); font-size:12px;}
+  .cal-cell.today .daynum{color:#fff; background:var(--accent); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px;}
+  .cal-evt{margin-top:3px; padding:2px 5px; border-radius:3px; font-size:11px; line-height:1.4; color:#fff; word-break:break-all;}
+  .cal-evt.deadline{background:var(--danger);}
+  .cal-evt.interview{background:var(--primary);}
+  .cal-evt.intern{background:var(--good);}
+  .cal-legend{display:flex; gap:16px; margin:14px 0 6px; font-size:12.5px; color:var(--ink-soft); align-items:center;}
+  .cal-legend span{display:inline-flex; align-items:center; gap:5px;}
+  .cal-legend i{width:10px; height:10px; border-radius:2px; display:inline-block;}
+  @media (max-width:760px){
+    .app{flex-direction:column;}
+    .sidebar{
+      width:100%;
+      flex-direction:row;
+      overflow-x:auto;
+      padding:14px 12px;
+      gap:6px;
+    }
+    .sidebar .brand{display:none;}
+    .tab-btn{border-radius:6px; white-space:nowrap;}
+    .main{padding:22px 16px 50px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="brand">就活ノート</div>
+    <button class="tab-btn active" data-tab="self">自己分析</button>
+    <button class="tab-btn" data-tab="industry">志望業界</button>
+    <button class="tab-btn" data-tab="company">企業一覧</button>
+    <button class="tab-btn" data-tab="intern">インターン</button>
+    <button class="tab-btn" data-tab="skill">資格・経験</button>
+    <button class="tab-btn" data-tab="calendar">カレンダー</button>
+  </div>
+  <div class="main" id="main">
+    <div class="empty">読み込み中…</div>
+  </div>
+</div>
+
+<script>
+/* ---------- storage helpers (Cloudflare Pages Functions経由でGitHubのdata.jsonに保存) ---------- */
+let _cache = null;
+async function _loadCache(){
+  if(_cache) return _cache;
+  try{
+    const r = await fetch('/api/data', { cache:'no-store' });
+    _cache = await r.json();
+  }catch(e){ _cache = {}; }
+  return _cache;
+}
+async function _saveCache(){
+  try{
+    const r = await fetch('/api/data', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(_cache)
+    });
+    return r.ok;
+  }catch(e){ console.error('storage save failed', e); return false; }
+}
+async function sGet(key, fallback){
+  const c = await _loadCache();
+  const k = key.replace('jobhunt:','');
+  return (c[k] !== undefined && c[k] !== null) ? c[k] : fallback;
+}
+async function sSet(key, value){
+  const c = await _loadCache();
+  const k = key.replace('jobhunt:','');
+  c[k] = value;
+  return await _saveCache();
+}
+function uid(){ return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function esc(str){
+  return (str ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function nl2br(str){ return esc(str).replace(/\n/g,'<br>'); }
+
+/* ---------- state ---------- */
+const state = {
+  self: { strengths:'', weaknesses:'', pr:'', vision:'', education:'', desiredConditions:'', gakuchika:[] },
+  industries: [],
+  companies: [],
+  interns: [],
+  quals: [],
+  activities: []
+};
+let currentTab = 'self';
+let sort = { key:'name', dir:'asc' };
+
+/* ---------- 会話で教えてもらった内容をここに追記していく ----------
+   Claudeがチャットで聞いた内容を、ここにidを振って追加 → ファイルを渡すと、
+   ブラウザ側で既に保存されてる内容とマージされる（idが同じものは上書きしない＝
+   ユーザーが編集/削除した内容を尊重する）。 */
+const SEED = {
+  self: {
+    strengths:'', weaknesses:'',
+    pr: '私は【チームでの成果】を重視し、【技術と顧客の両方】に向き合う【ジェネラリスト】志向のエンジニアを目指しています。高校からのアメフトや4年間の飲食店アルバイトでは、攻守両方やホールと厨房など複数の役割を経験し、多角的な視点からチームの課題改善に貢献しました。また、事前の備えを大切にする性格から早期に基本情報技術者試験に合格し、独学でプログラミング言語を学び、必要な知識を持ったうえでAIを駆使し、院対策Webアプリや在室管理アプリなども開発しました。これらを友人に提供して喜ばれた経験から、技術で直接ユーザーの課題を解決する面白さを学びました。将来的には、システムエンジニアとして個人の技術力を高めつつ、顧客の声を直接聞きながらチーム全体でより良いシステムを作り上げる人材になりたいです。制作したアプリなどは、連携済みのGitHubアカウントからご確認いただけます。',
+    vision: 'やってみたいことは、ユーザーの潜在的な課題を汲み取り、技術の力で解決するシステムの企画から開発までを一貫して担うことです。独学でのアプリ開発や、飲食店で接客と厨房の双方の視点を持った経験を通じて、作り手と使い手、両方の目線を持つことの重要性を学びました。入社後は、資格取得や個人開発で培ったITの基礎知識を活かしつつ、まずは開発現場で技術力を深めたいです。ゆくゆくは、顧客と直接向き合ってニーズを引き出し、多様な役割を横断するユーティリティ性を活かして、チーム全体でより良いシステムを作り上げるエンジニアとして貢献したいと考えております。',
+    education: '大阪公立大学 工学部 電気電子システム工学科（2023/04〜2027/03）\n宮崎研究室（2026/04〜2029/03、大学院進学予定）\n大阪府立池田高等学校（2020/04〜2023/03）',
+    desiredConditions: '【志望業種】第一志望：ソフトウェア・情報処理／第二志望：インターネット関連・Web／第三志望：ゲーム（情報・サービス）\n【志望職種】第一志望：ソフトウェアエンジニア／第二志望：システムエンジニア（SE）／第三志望：AIエンジニア\n【志望勤務地】第一志望：大阪府／第二志望：広島県／第三志望：兵庫県\n【就職先に求めること】年収が高い／知名度がある／福利厚生が充実している\n【志望企業規模】大手企業（社員数2,000人〜）',
+    gakuchika:[]
+  },
+  industries: [],
+  companies: [
+    { id:'seed-panasonic', name:'パナソニックグループ', industry:'機械／ソフトウェア・情報処理／電気・電子機器／半導体・電子部品／家電・AV機器', mypageUrl:'', salaryStart:'', annualSalary:'', avgAge:'', holidays:'', holidayDetail:'', status:'未応募', esDeadline:'', interviewDate:'', memo:'従業員数207,548人' },
+    { id:'seed-capcom', name:'カプコン', industry:'ゲーム（情報・サービス）／ソフトウェア', mypageUrl:'', salaryStart:'300000', annualSalary:'919', avgAge:'38', holidays:'121', holidayDetail:'完全週休2日制（土日）＋祝日、有給消化率73.3%', status:'未応募', esDeadline:'', interviewDate:'', memo:'大阪本社。学歴・職種問わず初任給一律30万円。月平均残業11.4時間、自己都合離職率2.2%（2025年3月期・有価証券報告書ベース）' }
+  ],
+  interns: [],
+  quals: [
+    { id:'seed-toeic', name:'TOEIC', date:'', note:'795点' },
+    { id:'seed-kihon', name:'基本情報技術者試験', date:'', note:'取得' },
+    { id:'seed-itpass', name:'ITパスポート', date:'', note:'取得' }
+  ],
+  activities: []
+};
+
+function mergeList(key, seedArr){
+  const existing = new Set(state[key].map(x=>x.id));
+  (seedArr||[]).forEach(item=>{ if(!existing.has(item.id)) state[key].push(item); });
+}
+async function mergeSeed(){
+  let changed = false;
+  ['strengths','weaknesses','pr','vision','education','desiredConditions'].forEach(f=>{
+    if(SEED.self[f] && !state.self[f]){ state.self[f] = SEED.self[f]; changed = true; }
+  });
+  const existingGIds = new Set((state.self.gakuchika||[]).map(g=>g.id));
+  (SEED.self.gakuchika||[]).forEach(g=>{ if(!existingGIds.has(g.id)){ state.self.gakuchika.push(g); changed = true; } });
+  ['industries','companies','interns','quals','activities'].forEach(key=>{
+    const before = state[key].length;
+    mergeList(key, SEED[key]);
+    if(state[key].length !== before) changed = true;
+  });
+  if(changed){
+    await Promise.all([
+      sSet('jobhunt:self', state.self),
+      sSet('jobhunt:industries', state.industries),
+      sSet('jobhunt:companies', state.companies),
+      sSet('jobhunt:interns', state.interns),
+      sSet('jobhunt:quals', state.quals),
+      sSet('jobhunt:activities', state.activities),
+    ]);
+  }
+}
+
+/* ---------- init ---------- */
+async function init(){
+  const [self, industries, companies, interns, quals, activities] = await Promise.all([
+    sGet('jobhunt:self', { strengths:'', weaknesses:'', pr:'', vision:'', education:'', desiredConditions:'', gakuchika:[] }),
+    sGet('jobhunt:industries', []),
+    sGet('jobhunt:companies', []),
+    sGet('jobhunt:interns', []),
+    sGet('jobhunt:quals', []),
+    sGet('jobhunt:activities', [])
+  ]);
+  state.self = self; state.industries = industries; state.companies = companies;
+  state.interns = interns; state.quals = quals; state.activities = activities;
+  await mergeSeed();
+  render();
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTab = btn.dataset.tab;
+    render();
+  });
+});
+
+function render(){
+  const main = document.getElementById('main');
+  if(currentTab==='self') main.innerHTML = renderSelf();
+  else if(currentTab==='industry') main.innerHTML = renderIndustry();
+  else if(currentTab==='company') main.innerHTML = renderCompany();
+  else if(currentTab==='intern') main.innerHTML = renderIntern();
+  else if(currentTab==='skill') main.innerHTML = renderSkill();
+  else if(currentTab==='calendar') main.innerHTML = renderCalendar();
+  bindEvents();
+}
+
+function flashSave(){
+  const el = document.getElementById('save-msg');
+  if(!el) return;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1200);
+}
+
+/* ================= 自己分析 ================= */
+function renderSelf(){
+  const g = state.self.gakuchika || [];
+  return `
+  <div class="section-head">
+    <div><h1>自己分析</h1><p>強み・弱みとガクチカ、面接で聞かれやすい質問への回答をまとめる</p></div>
+    <span class="save-msg" id="save-msg">保存したで</span>
+  </div>
+  <div class="card">
+    <h3>自己PR・学歴</h3>
+    <label>自己PR（自己紹介文）</label>
+    <textarea id="pr" style="min-height:130px;" placeholder="企業に伝えたい強みや自己紹介">${esc(state.self.pr)}</textarea>
+    <label>学歴</label>
+    <textarea id="education" style="min-height:70px;" placeholder="大学・学部・学科・研究室・高校など">${esc(state.self.education)}</textarea>
+    <label>強み</label>
+    <textarea id="strengths" placeholder="例：地道な検証を続けられる、チームで役割分担して動ける、など">${esc(state.self.strengths)}</textarea>
+    <label>弱み</label>
+    <textarea id="weaknesses" placeholder="例：完璧主義で抱え込みがち、初対面だと緊張しやすい、など">${esc(state.self.weaknesses)}</textarea>
+    <label>これからやってみたいこと</label>
+    <textarea id="vision" style="min-height:100px;" placeholder="興味のあることと、それを仕事にどう活かしたいか">${esc(state.self.vision)}</textarea>
+    <div style="margin-top:12px;"><button class="btn" onclick="saveBasics()">保存</button></div>
+  </div>
+
+  <div class="section-head" style="margin-top:26px;">
+    <h3 style="font-family:'Noto Serif JP',serif; font-size:16px; color:var(--primary);">ガクチカ</h3>
+    <button class="btn ghost small" onclick="addGakuchika()">＋ ガクチカを追加</button>
+  </div>
+  ${g.length===0 ? '<div class="empty">まだガクチカが登録されてへん。「＋ガクチカを追加」から作ってな</div>' : ''}
+  ${g.map(item=>renderGakuchikaCard(item)).join('')}
+  `;
+}
+
+function renderGakuchikaCard(item){
+  const qas = item.qa || [];
+  return `
+  <div class="card" data-gid="${item.id}">
+    <div class="item-block-head">
+      <input type="text" class="g-title" value="${esc(item.title)}" placeholder="タイトル（例：〇〇サークルでの△△）" style="font-weight:700; font-size:15px; border:none; background:transparent; padding:0;">
+      <button class="btn danger small" onclick="deleteGakuchika('${item.id}')">削除</button>
+    </div>
+    <label>内容（ガクチカ本文）</label>
+    <textarea class="g-content" style="min-height:110px;" placeholder="状況・課題・行動・結果の流れで書く">${esc(item.content)}</textarea>
+
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span class="muted">面接で聞かれやすい質問と回答</span>
+      <button class="btn ghost small" onclick="addQA('${item.id}')">＋ 質問を追加</button>
+    </div>
+    <div class="qa-list">
+      ${qas.map(qa=>`
+        <div class="qa-pair" data-qid="${qa.id}">
+          <div class="row" style="align-items:flex-start;">
+            <div style="flex:1;">
+              <input type="text" class="qa-q" value="${esc(qa.q)}" placeholder="想定質問（例：一番苦労したことは？）">
+              <textarea class="qa-a" style="margin-top:6px; min-height:55px;" placeholder="回答">${esc(qa.a)}</textarea>
+            </div>
+            <button class="btn danger small" onclick="deleteQA('${item.id}','${qa.id}')" style="margin-top:2px;">削除</button>
+          </div>
+        </div>
+      `).join('') || '<div class="muted" style="padding:6px 0;">質問はまだなし</div>'}
+    </div>
+    <div style="margin-top:12px;"><button class="btn small" onclick="saveGakuchika('${item.id}')">この内容を保存</button></div>
+  </div>`;
+}
+
+async function saveBasics(){
+  state.self.pr = document.getElementById('pr').value;
+  state.self.education = document.getElementById('education').value;
+  state.self.strengths = document.getElementById('strengths').value;
+  state.self.weaknesses = document.getElementById('weaknesses').value;
+  state.self.vision = document.getElementById('vision').value;
+  await sSet('jobhunt:self', state.self);
+  flashSave();
+}
+async function addGakuchika(){
+  state.self.gakuchika = state.self.gakuchika || [];
+  state.self.gakuchika.push({ id: uid(), title:'', content:'', qa:[] });
+  await sSet('jobhunt:self', state.self);
+  render();
+}
+async function deleteGakuchika(id){
+  if(!confirm('このガクチカを削除する？')) return;
+  state.self.gakuchika = state.self.gakuchika.filter(g=>g.id!==id);
+  await sSet('jobhunt:self', state.self);
+  render();
+}
+async function addQA(gid){
+  const g = state.self.gakuchika.find(x=>x.id===gid);
+  g.qa = g.qa || [];
+  g.qa.push({ id: uid(), q:'', a:'' });
+  await sSet('jobhunt:self', state.self);
+  render();
+}
+async function deleteQA(gid, qid){
+  const g = state.self.gakuchika.find(x=>x.id===gid);
+  g.qa = g.qa.filter(x=>x.id!==qid);
+  await sSet('jobhunt:self', state.self);
+  render();
+}
+async function saveGakuchika(gid){
+  const card = document.querySelector(`.card[data-gid="${gid}"]`);
+  const g = state.self.gakuchika.find(x=>x.id===gid);
+  g.title = card.querySelector('.g-title').value;
+  g.content = card.querySelector('.g-content').value;
+  card.querySelectorAll('.qa-pair').forEach(pair=>{
+    const qid = pair.dataset.qid;
+    const qa = g.qa.find(x=>x.id===qid);
+    if(qa){
+      qa.q = pair.querySelector('.qa-q').value;
+      qa.a = pair.querySelector('.qa-a').value;
+    }
+  });
+  await sSet('jobhunt:self', state.self);
+  flashSaveTemp(card);
+}
+function flashSaveTemp(card){
+  const btn = card.querySelector('button.btn.small');
+  if(!btn) return;
+  const old = btn.textContent;
+  btn.textContent = '保存したで';
+  setTimeout(()=>btn.textContent = old, 1000);
+}
+
+/* ================= 志望業界 ================= */
+function renderIndustry(){
+  const list = state.industries || [];
+  return `
+  <div class="section-head">
+    <div><h1>志望業界</h1><p>興味のある業界と、その理由をメモしておく</p></div>
+    <button class="btn" onclick="toggleForm('industry-form')">＋ 業界を追加</button>
+  </div>
+  <div class="card">
+    <h3>志望条件まとめ</h3>
+    <label>志望業種・職種・勤務地・企業規模など</label>
+    <textarea id="desiredConditions" style="min-height:140px;">${esc(state.self.desiredConditions)}</textarea>
+    <div style="margin-top:12px;"><button class="btn" onclick="saveDesiredConditions()">保存</button></div>
+  </div>
+  <form class="inline-form card" id="industry-form">
+    <h3>業界を追加</h3>
+    <label>業界名</label>
+    <input type="text" id="ind-name" placeholder="例：半導体・電子部品">
+    <label>志望理由・メモ</label>
+    <textarea id="ind-note" placeholder="なぜ興味を持ったか、軸との関係など"></textarea>
+    <div style="margin-top:12px;"><button type="button" class="btn" onclick="addIndustry()">追加する</button></div>
+  </form>
+  ${list.length===0 ? '<div class="empty">まだ業界が登録されてへん</div>' : list.map(i=>`
+    <div class="card">
+      <div class="item-block-head">
+        <h3>${esc(i.name)}</h3>
+        <button class="btn danger small" onclick="deleteIndustry('${i.id}')">削除</button>
+      </div>
+      <p style="white-space:pre-wrap; margin:0; font-size:14px;">${nl2br(i.note)}</p>
+    </div>
+  `).join('')}
+  `;
+}
+function toggleForm(id){
+  document.getElementById(id).classList.toggle('open');
+}
+async function saveDesiredConditions(){
+  state.self.desiredConditions = document.getElementById('desiredConditions').value;
+  await sSet('jobhunt:self', state.self);
+  render();
+}
+async function addIndustry(){
+  const name = document.getElementById('ind-name').value.trim();
+  if(!name){ alert('業界名を入力して'); return; }
+  state.industries.push({ id: uid(), name, note: document.getElementById('ind-note').value });
+  await sSet('jobhunt:industries', state.industries);
+  render();
+}
+async function deleteIndustry(id){
+  if(!confirm('削除する？')) return;
+  state.industries = state.industries.filter(i=>i.id!==id);
+  await sSet('jobhunt:industries', state.industries);
+  render();
+}
+
+/* ================= 企業一覧 ================= */
+const STATUS_OPTS = ['未応募','エントリー済','ES提出','一次面接','二次面接','最終面接','内定','不合格','辞退'];
+const COL_DEFS = [
+  {key:'name', label:'企業名', type:'text'},
+  {key:'industry', label:'業界', type:'text'},
+  {key:'salaryStart', label:'院卒初任給(月給/円)', type:'num'},
+  {key:'annualSalary', label:'年収(万円)', type:'num'},
+  {key:'avgAge', label:'平均年齢(歳)', type:'num'},
+  {key:'holidays', label:'年間休日(日)', type:'num'},
+  {key:'holidayDetail', label:'休日内訳', type:'text'},
+  {key:'status', label:'選考状況', type:'text'},
+  {key:'esDeadline', label:'ES締切', type:'text'},
+  {key:'interviewDate', label:'次の面接日程', type:'text'},
+  {key:'memo', label:'メモ', type:'text'},
+];
+
+function renderCompany(){
+  let list = [...state.companies];
+  list.sort((a,b)=>{
+    const def = COL_DEFS.find(c=>c.key===sort.key);
+    let va = a[sort.key], vb = b[sort.key];
+    if(def && def.type==='num'){
+      va = Number(va)||0; vb = Number(vb)||0;
+      return sort.dir==='asc' ? va-vb : vb-va;
+    }
+    va = (va||'').toString(); vb = (vb||'').toString();
+    return sort.dir==='asc' ? va.localeCompare(vb,'ja') : vb.localeCompare(va,'ja');
+  });
+
+  const rows = list.map(c=>`
+    <tr>
+      <td>${c.mypageUrl ? `<a class="company-link" href="${esc(c.mypageUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
+      <td>${esc(c.industry)}</td>
+      <td>${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
+      <td>${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
+      <td>${c.avgAge || ''}</td>
+      <td>${c.holidays || ''}</td>
+      <td>${esc(c.holidayDetail)}</td>
+      <td>${statusPill(c.status)}</td>
+      <td>${esc(c.esDeadline)}</td>
+      <td>${esc(c.interviewDate)}</td>
+      <td>${esc(c.memo)}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn ghost small" onclick="editCompany('${c.id}')">編集</button>
+        <button class="btn danger small" onclick="deleteCompany('${c.id}')">削除</button>
+      </td>
+    </tr>
+  `).join('');
+
+  return `
+  <div class="section-head">
+    <div><h1>企業一覧</h1><p>列名をクリックすると並び替えできる。企業名リンクはマイページに飛ぶで</p></div>
+    <button class="btn" onclick="openCompanyForm()">＋ 企業を追加</button>
+  </div>
+  ${companyFormHtml()}
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        ${COL_DEFS.map(c=>`<th onclick="setSort('${c.key}')">${c.label}${sort.key===c.key ? `<span class="arrow">${sort.dir==='asc'?'▲':'▼'}</span>`:''}</th>`).join('')}
+        <th>操作</th>
+      </tr></thead>
+      <tbody>${rows || `<tr><td colspan="12"><div class="empty">まだ企業が登録されてへん</div></td></tr>`}</tbody>
+    </table>
+  </div>
+  `;
+}
+
+function statusPill(status){
+  let cls = '';
+  if(status==='内定') cls='offer';
+  if(status==='不合格' || status==='辞退') cls='reject';
+  return `<span class="status-pill ${cls}">${esc(status||'未応募')}</span>`;
+}
+
+function companyFormHtml(editing){
+  const c = editing || { id:'', name:'', industry:'', mypageUrl:'', salaryStart:'', annualSalary:'', avgAge:'', holidays:'', holidayDetail:'', status:'未応募', esDeadline:'', interviewDate:'', memo:'' };
+  return `
+  <form class="inline-form card" id="company-form" data-editid="${c.id}">
+    <h3>${editing ? '企業を編集' : '企業を追加'}</h3>
+    <div class="row">
+      <div><label>企業名</label><input type="text" id="c-name" value="${esc(c.name)}"></div>
+      <div><label>業界</label><input type="text" id="c-industry" value="${esc(c.industry)}"></div>
+    </div>
+    <label>マイページURL</label>
+    <input type="url" id="c-url" value="${esc(c.mypageUrl)}" placeholder="https://...">
+    <div class="row">
+      <div><label>院卒初任給（月給・円）</label><input type="number" id="c-salaryStart" value="${esc(c.salaryStart)}"></div>
+      <div><label>年収（万円）</label><input type="number" id="c-annualSalary" value="${esc(c.annualSalary)}"></div>
+    </div>
+    <div class="row">
+      <div><label>平均年齢（歳）</label><input type="number" id="c-avgAge" value="${esc(c.avgAge)}"></div>
+      <div><label>年間休日（日）</label><input type="number" id="c-holidays" value="${esc(c.holidays)}"></div>
+    </div>
+    <label>休日内訳</label>
+    <input type="text" id="c-holidayDetail" value="${esc(c.holidayDetail)}" placeholder="例：完全週休2日制(土日)+夏季5+年末年始6+有給別途">
+    <div class="row">
+      <div>
+        <label>選考状況</label>
+        <select id="c-status">${STATUS_OPTS.map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select>
+      </div>
+      <div><label>メモ</label><input type="text" id="c-memo" value="${esc(c.memo)}"></div>
+    </div>
+    <div class="row">
+      <div><label>ES締切（カレンダーに表示）</label><input type="date" id="c-esDeadline" value="${esc(c.esDeadline)}"></div>
+      <div><label>次の面接日程（カレンダーに表示）</label><input type="date" id="c-interviewDate" value="${esc(c.interviewDate)}"></div>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:10px;">
+      <button type="button" class="btn" onclick="saveCompanyForm()">保存</button>
+      <button type="button" class="btn ghost" onclick="toggleForm('company-form')">閉じる</button>
+    </div>
+  </form>`;
+}
+
+function openCompanyForm(){
+  const f = document.getElementById('company-form');
+  f.outerHTML = companyFormHtml();
+  document.getElementById('company-form').classList.add('open');
+}
+function editCompany(id){
+  const c = state.companies.find(x=>x.id===id);
+  const f = document.getElementById('company-form');
+  f.outerHTML = companyFormHtml(c);
+  document.getElementById('company-form').classList.add('open');
+}
+async function saveCompanyForm(){
+  const form = document.getElementById('company-form');
+  const editId = form.dataset.editid;
+  const name = document.getElementById('c-name').value.trim();
+  if(!name){ alert('企業名を入力して'); return; }
+  const data = {
+    name,
+    industry: document.getElementById('c-industry').value,
+    mypageUrl: document.getElementById('c-url').value,
+    salaryStart: document.getElementById('c-salaryStart').value,
+    annualSalary: document.getElementById('c-annualSalary').value,
+    avgAge: document.getElementById('c-avgAge').value,
+    holidays: document.getElementById('c-holidays').value,
+    holidayDetail: document.getElementById('c-holidayDetail').value,
+    status: document.getElementById('c-status').value,
+    esDeadline: document.getElementById('c-esDeadline').value,
+    interviewDate: document.getElementById('c-interviewDate').value,
+    memo: document.getElementById('c-memo').value,
+  };
+  if(editId){
+    const idx = state.companies.findIndex(x=>x.id===editId);
+    state.companies[idx] = { id: editId, ...data };
+  } else {
+    state.companies.push({ id: uid(), ...data });
+  }
+  await sSet('jobhunt:companies', state.companies);
+  render();
+}
+async function deleteCompany(id){
+  if(!confirm('この企業を削除する？')) return;
+  state.companies = state.companies.filter(c=>c.id!==id);
+  await sSet('jobhunt:companies', state.companies);
+  render();
+}
+function setSort(key){
+  if(sort.key===key) sort.dir = sort.dir==='asc' ? 'desc' : 'asc';
+  else { sort.key = key; sort.dir = 'asc'; }
+  render();
+}
+
+/* ================= インターン ================= */
+function renderIntern(){
+  const list = state.interns || [];
+  return `
+  <div class="section-head">
+    <div><h1>インターン</h1><p>参加したインターンの内容と学びをまとめる</p></div>
+    <button class="btn" onclick="toggleForm('intern-form')">＋ インターンを追加</button>
+  </div>
+  <form class="inline-form card" id="intern-form">
+    <h3>インターンを追加</h3>
+    <div class="row">
+      <div><label>企業名</label><input type="text" id="in-company"></div>
+      <div><label>時期（表記）</label><input type="text" id="in-period" placeholder="例：2025年8月（3daysサマーインターン）"></div>
+    </div>
+    <label>開始日（カレンダーに表示）</label>
+    <input type="date" id="in-date">
+    <label>内容</label>
+    <textarea id="in-content" placeholder="どんなワークをしたか"></textarea>
+    <label>学び・気づき</label>
+    <textarea id="in-learning" placeholder="そこで得た学び、志望動機に繋がる話など"></textarea>
+    <div style="margin-top:12px;"><button type="button" class="btn" onclick="addIntern()">追加する</button></div>
+  </form>
+  ${list.length===0 ? '<div class="empty">まだインターン記録がないで</div>' : list.map(i=>`
+    <div class="card">
+      <div class="item-block-head">
+        <h3>${esc(i.company)} <span class="muted" style="font-weight:400; font-size:13px;">${esc(i.period)}${i.date ? ' ／ 開始日:'+esc(i.date) : ''}</span></h3>
+        <button class="btn danger small" onclick="deleteIntern('${i.id}')">削除</button>
+      </div>
+      <p style="margin:6px 0; font-size:14px;"><strong>内容：</strong>${nl2br(i.content)}</p>
+      <p style="margin:6px 0; font-size:14px;"><strong>学び：</strong>${nl2br(i.learning)}</p>
+    </div>
+  `).join('')}
+  `;
+}
+async function addIntern(){
+  const company = document.getElementById('in-company').value.trim();
+  if(!company){ alert('企業名を入力して'); return; }
+  state.interns.push({
+    id: uid(), company,
+    period: document.getElementById('in-period').value,
+    date: document.getElementById('in-date').value,
+    content: document.getElementById('in-content').value,
+    learning: document.getElementById('in-learning').value,
+  });
+  await sSet('jobhunt:interns', state.interns);
+  render();
+}
+async function deleteIntern(id){
+  if(!confirm('削除する？')) return;
+  state.interns = state.interns.filter(i=>i.id!==id);
+  await sSet('jobhunt:interns', state.interns);
+  render();
+}
+
+/* ================= 資格・経験 ================= */
+function renderSkill(){
+  const quals = state.quals || [];
+  const acts = state.activities || [];
+  return `
+  <div class="section-head">
+    <div><h1>資格・経験</h1><p>取得した資格と、やってきたこと（課外活動・経験）を記録する</p></div>
+    <span></span>
+  </div>
+
+  <div class="section-head" style="margin-top:6px;">
+    <h3 style="font-family:'Noto Serif JP',serif; font-size:16px; color:var(--primary);">資格</h3>
+    <button class="btn ghost small" onclick="toggleForm('qual-form')">＋ 資格を追加</button>
+  </div>
+  <form class="inline-form card" id="qual-form">
+    <div class="row">
+      <div><label>資格名</label><input type="text" id="q-name" placeholder="例：基本情報技術者"></div>
+      <div><label>取得日</label><input type="date" id="q-date"></div>
+    </div>
+    <label>メモ</label>
+    <input type="text" id="q-note" placeholder="スコアや補足など">
+    <div style="margin-top:12px;"><button type="button" class="btn" onclick="addQual()">追加する</button></div>
+  </form>
+  ${quals.length===0 ? '<div class="empty">まだ資格の登録なし</div>' : `
+  <div class="table-wrap" style="margin-bottom:26px;">
+    <table>
+      <thead><tr><th>資格名</th><th>取得日</th><th>メモ</th><th>操作</th></tr></thead>
+      <tbody>
+        ${quals.map(q=>`<tr>
+          <td>${esc(q.name)}</td><td>${esc(q.date)}</td><td>${esc(q.note)}</td>
+          <td><button class="btn danger small" onclick="deleteQual('${q.id}')">削除</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`}
+
+  <div class="section-head" style="margin-top:26px;">
+    <h3 style="font-family:'Noto Serif JP',serif; font-size:16px; color:var(--primary);">やったこと・活動経験</h3>
+    <button class="btn ghost small" onclick="toggleForm('act-form')">＋ 追加</button>
+  </div>
+  <form class="inline-form card" id="act-form">
+    <div class="row">
+      <div><label>タイトル</label><input type="text" id="a-title" placeholder="例：〇〇コンテスト出場、長期インターン、部活の役職など"></div>
+      <div><label>時期</label><input type="text" id="a-date" placeholder="例：2025年4月〜現在"></div>
+    </div>
+    <label>内容</label>
+    <textarea id="a-content" placeholder="何をしたか、どんな役割だったか"></textarea>
+    <div style="margin-top:12px;"><button type="button" class="btn" onclick="addActivity()">追加する</button></div>
+  </form>
+  ${acts.length===0 ? '<div class="empty">まだ活動の登録なし</div>' : acts.map(a=>`
+    <div class="card">
+      <div class="item-block-head">
+        <h3>${esc(a.title)} <span class="muted" style="font-weight:400; font-size:13px;">${esc(a.date)}</span></h3>
+        <button class="btn danger small" onclick="deleteActivity('${a.id}')">削除</button>
+      </div>
+      <p style="margin:0; font-size:14px;">${nl2br(a.content)}</p>
+    </div>
+  `).join('')}
+  `;
+}
+async function addQual(){
+  const name = document.getElementById('q-name').value.trim();
+  if(!name){ alert('資格名を入力して'); return; }
+  state.quals.push({ id: uid(), name, date: document.getElementById('q-date').value, note: document.getElementById('q-note').value });
+  await sSet('jobhunt:quals', state.quals);
+  render();
+}
+async function deleteQual(id){
+  if(!confirm('削除する？')) return;
+  state.quals = state.quals.filter(q=>q.id!==id);
+  await sSet('jobhunt:quals', state.quals);
+  render();
+}
+async function addActivity(){
+  const title = document.getElementById('a-title').value.trim();
+  if(!title){ alert('タイトルを入力して'); return; }
+  state.activities.push({ id: uid(), title, date: document.getElementById('a-date').value, content: document.getElementById('a-content').value });
+  await sSet('jobhunt:activities', state.activities);
+  render();
+}
+async function deleteActivity(id){
+  if(!confirm('削除する？')) return;
+  state.activities = state.activities.filter(a=>a.id!==id);
+  await sSet('jobhunt:activities', state.activities);
+  render();
+}
+
+/* ================= カレンダー ================= */
+const calState = { year: new Date().getFullYear(), month: new Date().getMonth() };
+function pad(n){ return n.toString().padStart(2,'0'); }
+function collectEvents(){
+  const evts = [];
+  (state.companies||[]).forEach(c=>{
+    if(c.esDeadline) evts.push({date:c.esDeadline, label:`${c.name} ES締切`, type:'deadline'});
+    if(c.interviewDate) evts.push({date:c.interviewDate, label:`${c.name} 面接`, type:'interview'});
+  });
+  (state.interns||[]).forEach(i=>{
+    if(i.date) evts.push({date:i.date, label:`${i.company} インターン`, type:'intern'});
+  });
+  return evts;
+}
+function renderCalendar(){
+  const evts = collectEvents();
+  const y = calState.year, m = calState.month;
+  const first = new Date(y, m, 1);
+  const startOffset = first.getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const todayStr = new Date().toISOString().slice(0,10);
+  const dow = ['日','月','火','水','木','金','土'];
+
+  let cells = '';
+  for(let i=0;i<startOffset;i++) cells += `<div class="cal-cell blank"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = `${y}-${pad(m+1)}-${pad(d)}`;
+    const dayEvts = evts.filter(e=>e.date===dateStr);
+    cells += `<div class="cal-cell ${dateStr===todayStr?'today':''}">
+      <div class="daynum">${d}</div>
+      ${dayEvts.map(e=>`<div class="cal-evt ${e.type}">${esc(e.label)}</div>`).join('')}
+    </div>`;
+  }
+
+  return `
+  <div class="section-head">
+    <div><h1>カレンダー</h1><p>企業一覧のES締切・面接日程、インターン開始日を自動でまとめて表示する</p></div>
+  </div>
+  <div class="cal-head">
+    <button class="btn ghost small" onclick="shiftMonth(-1)">← 前月</button>
+    <h2>${y}年 ${m+1}月</h2>
+    <button class="btn ghost small" onclick="shiftMonth(1)">次月 →</button>
+    <button class="btn ghost small" onclick="goToday()">今月</button>
+  </div>
+  <div class="cal-legend">
+    <span><i style="background:var(--danger);"></i>ES締切</span>
+    <span><i style="background:var(--primary);"></i>面接</span>
+    <span><i style="background:var(--good);"></i>インターン</span>
+  </div>
+  <div class="cal-grid">
+    ${dow.map(d=>`<div class="cal-dow">${d}</div>`).join('')}
+    ${cells}
+  </div>
+  ${evts.length===0 ? '<div class="empty" style="margin-top:16px;">企業一覧でES締切・面接日程を入力するか、インターンで開始日を入力すると、ここに表示されるで</div>' : ''}
+  `;
+}
+function shiftMonth(diff){
+  calState.month += diff;
+  if(calState.month<0){ calState.month=11; calState.year--; }
+  if(calState.month>11){ calState.month=0; calState.year++; }
+  render();
+}
+function goToday(){
+  const n = new Date();
+  calState.year = n.getFullYear(); calState.month = n.getMonth();
+  render();
+}
+
+function bindEvents(){ /* placeholder for future delegated events */ }
+
+init();
+</script>
+</body>
+</html>
