@@ -105,6 +105,11 @@
   .qa-inner{overflow:hidden;}
   .qa-pair .a{font-size:13px; color:#c9d1d8; margin:0; padding:2px 14px 12px 14px; white-space:pre-wrap; line-height:1.75;}
   .qa-section-title{font-size:11.5px; color:var(--ink-faint); margin:16px 0 8px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;}
+  .qual-row{display:flex; align-items:center; gap:14px; padding:11px 14px; margin:8px 0; background:var(--surface); border-left:2px solid var(--border); border-radius:0 6px 6px 0; flex-wrap:wrap;}
+  .qa-q.qual-q{gap:14px; flex-wrap:wrap;}
+  .qual-name{font-weight:700; font-size:13.5px; color:var(--ink);}
+  .qual-date{font-size:11.5px; color:var(--ink-soft);}
+  .qual-note{font-size:11.5px; color:var(--accent-lime); background:rgba(126,231,135,.08); border:1px solid rgba(126,231,135,.25); border-radius:20px; padding:2px 10px;}
 
   /* --- カレンダー --- */
   .cal-head{display:flex; align-items:center; gap:16px; margin-bottom:18px;}
@@ -441,11 +446,13 @@ function renderSkill(){
   return `
   <div class="section-head"><h1>資格・経験</h1><p>資格と活動経験</p></div>
   <h3 style="font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">資格</h3>
-  ${quals.length===0 ? '<div class="empty">まだ登録なし</div>' : `
-  <div class="table-wrap" style="margin-bottom:26px;"><table>
-    <thead><tr><th>資格名</th><th>取得日</th><th>メモ</th></tr></thead>
-    <tbody>${quals.map(q=>`<tr><td>${esc(q.name)}</td><td>${esc(q.date)}</td><td>${esc(q.note)}</td></tr>`).join('')}</tbody>
-  </table></div>`}
+  ${quals.length===0 ? '<div class="empty">まだ登録なし</div>' : quals.map(q=>{
+    const head = `<span class="qual-name">${esc(q.name)}</span>${q.date?`<span class="qual-date">${esc(q.date)}</span>`:''}${q.note?`<span class="qual-note">${esc(q.note)}</span>`:''}`;
+    if(q.detail){
+      return `<div class="qa-pair"><button type="button" class="qa-q qual-q">${head}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${nl2br(q.detail)}</div></div></div></div>`;
+    }
+    return `<div class="qual-row">${head}</div>`;
+  }).join('')}
   <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:24px; letter-spacing:-0.01em;">やったこと・活動経験</h3>
   ${acts.length===0 ? '<div class="empty">まだ登録なし</div>' : acts.map(a=>`
     <div class="card"><h3>${esc(a.title)} <span class="muted" style="font-weight:400; font-size:13px;">${esc(a.date)}</span></h3><p class="body">${nl2br(a.content)}</p></div>
