@@ -153,6 +153,7 @@
     <div class="brand">就活ノート</div>
     <div class="updated" id="updated"></div>
     <button class="tab-btn active" data-tab="self">自己分析</button>
+    <button class="tab-btn" data-tab="research">研究</button>
     <button class="tab-btn" data-tab="industry">志望業界</button>
     <button class="tab-btn" data-tab="company">企業一覧</button>
     <button class="tab-btn" data-tab="intern">インターン</button>
@@ -210,6 +211,7 @@ window.addEventListener('load', ()=>{
 function render(){
   const main = document.getElementById('main');
   if(currentTab==='self') main.innerHTML = renderSelf();
+  else if(currentTab==='research') main.innerHTML = renderResearch();
   else if(currentTab==='industry') main.innerHTML = renderIndustry();
   else if(currentTab==='company') main.innerHTML = renderCompany();
   else if(currentTab==='intern') main.innerHTML = renderIntern();
@@ -286,6 +288,20 @@ function renderDesiredConditions(text){
     }).join('');
     return `<div class="dc-row"><div class="dc-label">${esc(label)}</div><div class="dc-chips">${chips}</div></div>`;
   }).join('');
+}
+function renderResearch(){
+  const r = data.research || {};
+  if(!r.title && !r.overview){
+    return `<div class="section-head"><h1>研究</h1><p>研究テーマや内容</p></div><div class="empty">まだ登録なし</div>`;
+  }
+  return `
+  <div class="section-head"><h1>研究</h1><p>研究テーマ・内容・意義</p></div>
+  <div class="card"><h3>${esc(r.title) || '研究テーマ'}</h3></div>
+  <div class="card"><h3>研究概要</h3><p class="body">${nl2br(r.overview)}</p></div>
+  <div class="card"><h3>研究の意義</h3><p class="body">${nl2br(r.significance)}</p></div>
+  <div class="card"><h3>研究を選んだ理由</h3><p class="body">${nl2br(r.reason)}</p></div>
+  <div class="card"><h3>研究から学んだこと</h3><p class="body">${nl2br(r.learned)}</p></div>
+  `;
 }
 function renderIndustry(){
   const s = data.self || {};
