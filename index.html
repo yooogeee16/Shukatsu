@@ -177,6 +177,28 @@
     .sidebar .brand, .sidebar .updated, .tab-indicator{display:none;}
     .tab-btn{border-radius:6px; white-space:nowrap;}
     .main{padding:26px 18px 54px;}
+
+    /* 企業一覧：テーブルをカード形式に切り替え、横スクロールをなくす */
+    .table-wrap{overflow-x:visible; border:none;}
+    #main table{width:100%;}
+    #main thead{display:none;}
+    #main tbody, #main tr, #main td{display:block; width:100%;}
+    #main tbody tr{
+      border:1px solid var(--border-soft); border-radius:10px; padding:14px 16px; margin-bottom:12px;
+      background:var(--card);
+    }
+    #main tbody td{
+      border:none; padding:6px 0; white-space:normal !important; max-width:none !important;
+      display:block !important; -webkit-line-clamp:unset !important; overflow:visible !important;
+      position:static !important; background:transparent !important;
+    }
+    #main tbody td::before{
+      content:attr(data-label); display:block; font-size:10px; color:var(--ink-faint);
+      letter-spacing:0.04em; margin-bottom:2px;
+    }
+    #main tbody td:first-child::before{display:none;}
+    #main tbody td:first-child{font-size:15.5px; padding-bottom:8px; margin-bottom:6px; border-bottom:1px solid var(--border-soft);}
+    #main tbody td:empty{display:none;}
   }
 </style>
 </head>
@@ -394,16 +416,16 @@ function renderCompany(){
   });
   const rows = list.map(c=>`
     <tr>
-      <td>${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
-      <td>${esc(c.industry)}</td>
-      <td>${esc(c.location)}</td>
-      <td>${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
-      <td>${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
-      <td>${c.avgAge || ''}</td>
-      <td>${c.holidays || ''}</td>
-      <td>${esc(c.holidayDetail)}</td>
-      <td>${statusPill(c.status)}</td>
-      <td>${esc(c.memo)}</td>
+      <td data-label="企業名">${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
+      <td data-label="業界">${esc(c.industry)}</td>
+      <td data-label="本拠地">${esc(c.location)}</td>
+      <td data-label="院卒初任給(月給/円)">${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
+      <td data-label="平均年収(万円)">${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
+      <td data-label="平均年齢(歳)">${c.avgAge || ''}</td>
+      <td data-label="年間休日(日)">${c.holidays || ''}</td>
+      <td data-label="休日内訳">${esc(c.holidayDetail)}</td>
+      <td data-label="選考状況">${statusPill(c.status)}</td>
+      <td data-label="メモ">${esc(c.memo)}</td>
     </tr>
   `).join('');
   return `
