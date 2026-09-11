@@ -137,6 +137,18 @@
   .dc-chip.rank-2 b{color:var(--accent-cyan);}
   .dc-chip.rank-3{border-color:var(--border); opacity:.75;}
 
+  /* --- 学歴タイムライン --- */
+  .edu-timeline{position:relative; padding-left:2px; margin-top:4px;}
+  .edu-item{position:relative; padding:0 0 22px 26px; border-left:1px solid var(--border);}
+  .edu-item:last-child{border-left:1px solid transparent; padding-bottom:0;}
+  .edu-dot{position:absolute; left:-5px; top:3px; width:9px; height:9px; border-radius:50%; box-shadow:0 0 0 4px var(--card);}
+  .edu-item:nth-child(3n+1) .edu-dot{background:var(--accent-cyan);}
+  .edu-item:nth-child(3n+2) .edu-dot{background:var(--accent-lime);}
+  .edu-item:nth-child(3n+3) .edu-dot{background:var(--accent-red);}
+  .edu-school{font-weight:700; font-size:14.5px; color:var(--ink); letter-spacing:-0.01em;}
+  .edu-period{font-size:12px; color:var(--ink-soft); margin-top:4px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .edu-note{display:inline-block; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:2px 10px; font-size:11px; color:var(--ink-soft);}
+
   @media (max-width:760px){
     .app{flex-direction:column;}
     .sidebar{width:100%; flex-direction:row; overflow-x:auto; padding:16px 14px; gap:4px;}
@@ -237,13 +249,33 @@ function render(){
   staggerEls.forEach((el, i)=>{ el.style.animationDelay = Math.min(i*35, 400) + 'ms'; });
 }
 
+function renderEducation(text){
+  if(!text) return '<p class="body"><span class="muted">未入力</span></p>';
+  const lines = text.split('\n').filter(Boolean);
+  const items = lines.map(line=>{
+    const m = line.match(/^(.+?)[（(](.+?)[）)]\s*$/);
+    if(!m) return { school: line, period: '', notes: [] };
+    const school = m[1].trim();
+    const parts = m[2].split(/、|,/).map(p=>p.trim()).filter(Boolean);
+    const period = parts[0] || '';
+    const notes = parts.slice(1);
+    return { school, period, notes };
+  });
+  return `<div class="edu-timeline">${items.map(it=>`
+    <div class="edu-item">
+      <div class="edu-dot"></div>
+      <div class="edu-school">${esc(it.school)}</div>
+      ${(it.period || it.notes.length) ? `<div class="edu-period">${esc(it.period)}${it.notes.map(n=>`<span class="edu-note">${esc(n)}</span>`).join('')}</div>` : ''}
+    </div>
+  `).join('')}</div>`;
+}
 function renderSelf(){
   const s = data.self || {};
   const g = s.gakuchika || [];
   return `
   <div class="section-head"><h1>自己分析</h1><p>強み・弱み・自己PR・学歴・ガクチカ</p></div>
   <div class="card"><h3>自己PR</h3><p class="body">${s.pr ? nl2br(s.pr) : '<span class="muted">未入力</span>'}</p></div>
-  <div class="card"><h3>学歴</h3><p class="body">${s.education ? nl2br(s.education) : '<span class="muted">未入力</span>'}</p></div>
+  <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p></div>
   <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p></div>
   <div class="card"><h3>これからやってみたいこと</h3><p class="body">${s.vision ? nl2br(s.vision) : '<span class="muted">未入力</span>'}</p></div>
