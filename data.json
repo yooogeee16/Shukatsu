@@ -358,20 +358,41 @@
     {
       "id": "seed-toeic",
       "name": "TOEIC",
-      "date": "",
-      "note": "795点"
+      "date": "2026-04-19",
+      "note": "795点",
+      "detail": "Listening：420点（Percentile 71%）／Reading：375点（Percentile 74%）"
     },
     {
       "id": "seed-kihon",
       "name": "基本情報技術者試験",
-      "date": "",
-      "note": "取得"
+      "date": "2026-04-25",
+      "note": "合格",
+      "detail": "科目A評価点：735点／科目B評価点：745点（合格基準：各600点以上／1,000点）\n受験番号：FE2604GSPU"
     },
     {
       "id": "seed-itpass",
       "name": "ITパスポート",
+      "date": "2026-05-09",
+      "note": "取得（総合825点）",
+      "detail": "総合評価点：825点\nストラテジ系：765点／マネジメント系：735点／テクノロジ系：875点\n（合格基準：総合600点以上、各分野300点以上／1,000点）\n受験番号：IP26046AMB"
+    },
+    {
+      "id": "seed-color2",
+      "name": "色彩検定2級",
       "date": "",
-      "note": "取得"
+      "note": "取得目指し中"
+    },
+    {
+      "id": "seed-ap",
+      "name": "応用情報技術者試験",
+      "date": "",
+      "note": "取得目指し中"
+    },
+    {
+      "id": "seed-denken3",
+      "name": "第三種電気主任技術者（電験三種）",
+      "date": "",
+      "note": "後々取得予定"
     }
   ],
   "activities": [],
