@@ -323,7 +323,7 @@ function renderCompany(){
   });
   const rows = list.map(c=>`
     <tr>
-      <td>${c.mypageUrl ? `<a class="company-link" href="${esc(c.mypageUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
+      <td>${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
       <td>${esc(c.industry)}</td>
       <td>${esc(c.location)}</td>
       <td>${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
@@ -336,7 +336,7 @@ function renderCompany(){
     </tr>
   `).join('');
   return `
-  <div class="section-head"><h1>企業一覧</h1><p>列名クリックで並び替え。企業名リンクはマイページへ</p></div>
+  <div class="section-head"><h1>企業一覧</h1><p>列名クリックで並び替え。企業名リンクは各社の採用ページへ</p></div>
   <div class="table-wrap"><table>
     <thead><tr>
       ${COL_DEFS.map(c=>`<th data-sort="${c.key}">${c.label}${sort.key===c.key ? `<span class="arrow">${sort.dir==='asc'?'▲':'▼'}</span>`:''}</th>`).join('')}
@@ -356,6 +356,7 @@ function setSort(key){
 
 function renderIntern(){
   const list = data.interns || [];
+  const mypages = (data.companies||[]).filter(c=>c.mypageUrl);
   return `
   <div class="section-head"><h1>インターン</h1><p>参加したインターンの内容と学び</p></div>
   ${list.length===0 ? '<div class="empty">まだ登録なし</div>' : list.map(i=>`
@@ -365,6 +366,23 @@ function renderIntern(){
       <p class="body"><strong>学び：</strong>${nl2br(i.learning)}</p>
     </div>
   `).join('')}
+
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">マイページ一覧</h3>
+  ${mypages.length===0 ? '<div class="empty">登録済みのマイページはまだなし</div>' : `
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>企業名</th><th>選考状況</th><th>マイページ</th></tr></thead>
+      <tbody>
+        ${mypages.map(c=>`
+          <tr>
+            <td>${esc(c.name)}</td>
+            <td>${statusPill(c.status)}</td>
+            <td><a class="company-link" href="${esc(c.mypageUrl)}" target="_blank" rel="noopener">ログインページへ</a></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>`}
   `;
 }
 
