@@ -196,6 +196,9 @@
   .edu-school{font-weight:700; font-size:14.5px; color:var(--ink); letter-spacing:-0.01em;}
   .edu-period{font-size:12px; color:var(--ink-soft); margin-top:4px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
   .edu-note{display:inline-block; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:2px 10px; font-size:11px; color:var(--ink-soft);}
+  .edu-sub{margin-top:10px; padding-left:16px; border-left:2px solid var(--border); display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .edu-sub-name{font-weight:700; font-size:12.5px; color:var(--ink-soft);}
+  .edu-sub-period{font-size:11px; color:var(--ink-faint); letter-spacing:0.02em;}
 
   @media (max-width:760px){
     .app{flex-direction:column;}
@@ -338,21 +341,39 @@ function render(){
 
 function renderEducation(text){
   if(!text) return '<p class="body"><span class="muted">未入力</span></p>';
-  const lines = text.split('\n').filter(Boolean);
-  const items = lines.map(line=>{
-    const m = line.match(/^(.+?)[（(](.+?)[）)]\s*$/);
-    if(!m) return { school: line, period: '', notes: [] };
-    const school = m[1].trim();
-    const parts = m[2].split(/、|,/).map(p=>p.trim()).filter(Boolean);
-    const period = parts[0] || '';
-    const notes = parts.slice(1);
-    return { school, period, notes };
+  const rawLines = text.split('\n').filter(l=>l.trim());
+  const items = [];
+  rawLines.forEach(line=>{
+    const isSub = /^\t|^\s{2,}/.test(line);
+    const m = line.trim().match(/^(.+?)[（(](.+?)[）)]\s*$/);
+    let entry;
+    if(!m){ entry = { school: line.trim(), period: '', notes: [] }; }
+    else{
+      const school = m[1].trim();
+      const parts = m[2].split(/、|,/).map(p=>p.trim()).filter(Boolean);
+      entry = { school, period: parts[0] || '', notes: parts.slice(1) };
+    }
+    if(isSub && items.length){
+      const parent = items[items.length-1];
+      parent.subs = parent.subs || [];
+      parent.subs.push(entry);
+    } else {
+      entry.subs = [];
+      items.push(entry);
+    }
   });
   return `<div class="edu-timeline">${items.map(it=>`
     <div class="edu-item">
       <div class="edu-dot"></div>
       <div class="edu-school">${esc(it.school)}</div>
       ${(it.period || it.notes.length) ? `<div class="edu-period">${esc(it.period)}${it.notes.map(n=>`<span class="edu-note">${esc(n)}</span>`).join('')}</div>` : ''}
+      ${it.subs.map(sub=>`
+        <div class="edu-sub">
+          <span class="edu-sub-name">${esc(sub.school)}</span>
+          ${sub.period ? `<span class="edu-sub-period">${esc(sub.period)}</span>` : ''}
+          ${sub.notes.map(n=>`<span class="edu-note">${esc(n)}</span>`).join('')}
+        </div>
+      `).join('')}
     </div>
   `).join('')}</div>`;
 }
