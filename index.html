@@ -141,6 +141,8 @@
   .platform-item:hover{border-color:var(--accent-cyan); background:var(--surface);}
   .platform-name{font-weight:700; font-size:14px; color:var(--ink);}
   .platform-tag{font-size:11px; font-weight:700; padding:3px 12px; border-radius:20px; white-space:nowrap;}
+  .gcal-wrap{border:1px solid var(--border-soft); border-radius:10px; overflow:hidden; background:#101010;}
+  .gcal-wrap iframe{display:block;}
   .tag-scout{background:rgba(126,231,135,.1); color:var(--accent-lime); border:1px solid rgba(126,231,135,.3);}
   .tag-info{background:rgba(94,184,255,.1); color:var(--accent-cyan); border:1px solid rgba(94,184,255,.3);}
 
@@ -547,6 +549,14 @@ function collectEvents(){
   (data.interns||[]).forEach(i=>{ if(i.date) evts.push({date:i.date, label:`${i.company} インターン`, type:'intern'}); });
   return evts;
 }
+const GCAL_IDS = [
+  '88ndb9hbsa7pbu490hbs9f5d68vng6gb@import.calendar.google.com',
+  'ee09rt29rc5bj0p47iqbkmbhhocqod7f@import.calendar.google.com'
+];
+function gcalEmbedUrl(){
+  const srcParams = GCAL_IDS.map(id=>`src=${encodeURIComponent(id)}`).join('&');
+  return `https://calendar.google.com/calendar/embed?${srcParams}&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showNav=1&showTabs=0&showCalendars=0&showTz=0&showPrint=0&bgcolor=%23101010`;
+}
 function renderCalendar(){
   const evts = collectEvents();
   const y = calState.year, m = calState.month;
@@ -563,7 +573,11 @@ function renderCalendar(){
     cells += `<div class="cal-cell ${dateStr===todayStr?'today':''}"><div class="daynum">${d}</div>${dayEvts.map(e=>`<div class="cal-evt ${e.type}">${esc(e.label)}</div>`).join('')}</div>`;
   }
   return `
-  <div class="section-head"><h1>カレンダー</h1><p>インターンの開始日をまとめて表示</p></div>
+  <div class="section-head"><h1>カレンダー</h1><p>Googleカレンダー(就活・イベント)を反映</p></div>
+  <div class="gcal-wrap">
+    <iframe src="${gcalEmbedUrl()}" style="border:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+  </div>
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin:30px 0 14px; letter-spacing:-0.01em;">インターン開始日カレンダー</h3>
   <div class="cal-head">
     <button class="cal-nav" data-shift="-1">← 前月</button>
     <h2>${y}年 ${m+1}月</h2>
