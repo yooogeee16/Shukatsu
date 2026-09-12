@@ -332,7 +332,7 @@ window.addEventListener('load', ()=>{
   if(activeBtn) moveIndicator(activeBtn);
 });
 
-function render(){
+function render(skipAnim){
   const main = document.getElementById('main');
   if(currentTab==='self') main.innerHTML = renderSelf();
   else if(currentTab==='research') main.innerHTML = renderResearch();
@@ -358,20 +358,20 @@ function render(){
   document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       prVariantIndex = parseInt(btn.dataset.idx);
-      render();
+      render(true);
     });
   });
   document.querySelectorAll('.gaku-tab').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       gakuchikaIndex = parseInt(btn.dataset.idx);
-      render();
+      render(true);
     });
   });
   const carPrev = document.getElementById('carPrev');
   const carNext = document.getElementById('carNext');
   const bankLen = (data.self && data.self.interviewBank) ? data.self.interviewBank.length : 0;
-  if(carPrev) carPrev.addEventListener('click', ()=>{ interviewIndex = (interviewIndex - 1 + bankLen) % bankLen; render(); });
-  if(carNext) carNext.addEventListener('click', ()=>{ interviewIndex = (interviewIndex + 1) % bankLen; render(); });
+  if(carPrev) carPrev.addEventListener('click', ()=>{ interviewIndex = (interviewIndex - 1 + bankLen) % bankLen; render(true); });
+  if(carNext) carNext.addEventListener('click', ()=>{ interviewIndex = (interviewIndex + 1) % bankLen; render(true); });
   const carousel = document.getElementById('interviewCarousel');
   if(carousel){
     let touchStartX = null;
@@ -382,7 +382,7 @@ function render(){
       if(Math.abs(dx) > 40){
         if(dx < 0) interviewIndex = (interviewIndex + 1) % bankLen;
         else interviewIndex = (interviewIndex - 1 + bankLen) % bankLen;
-        render();
+        render(true);
       }
       touchStartX = null;
     });
@@ -394,11 +394,13 @@ function render(){
       btn.classList.toggle('open', isOpen);
     });
   });
-  main.classList.remove('fade-out');
-  void main.offsetWidth;
-  main.classList.add('fade-in');
-  const staggerEls = main.querySelectorAll('.card, tbody tr');
-  staggerEls.forEach((el, i)=>{ el.style.animationDelay = Math.min(i*35, 400) + 'ms'; });
+  if(!skipAnim){
+    main.classList.remove('fade-out');
+    void main.offsetWidth;
+    main.classList.add('fade-in');
+    const staggerEls = main.querySelectorAll('.card, tbody tr');
+    staggerEls.forEach((el, i)=>{ el.style.animationDelay = Math.min(i*35, 400) + 'ms'; });
+  }
 }
 
 function renderEducation(text){
