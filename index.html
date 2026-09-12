@@ -268,6 +268,7 @@ let data = { self:{}, industries:[], companies:[], interns:[], quals:[], activit
 let currentTab = 'self';
 let sort = { key:'name', dir:'asc' };
 let prVariantIndex = 0;
+let gakuchikaIndex = 0;
 const calState = { year:new Date().getFullYear(), month:new Date().getMonth() };
 
 async function init(){
@@ -330,9 +331,15 @@ function render(){
   if(sortDirBtn){
     sortDirBtn.addEventListener('click', ()=>{ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; render(); });
   }
-  document.querySelectorAll('.pr-tab').forEach(btn=>{
+  document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       prVariantIndex = parseInt(btn.dataset.idx);
+      render();
+    });
+  });
+  document.querySelectorAll('.gaku-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      gakuchikaIndex = parseInt(btn.dataset.idx);
       render();
     });
   });
@@ -409,8 +416,13 @@ function renderSelf(){
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
   <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p>${charCount(s.weaknesses)}</div>
   <div class="card"><h3>これからやってみたいこと</h3><p class="body">${s.vision ? nl2br(s.vision) : '<span class="muted">未入力</span>'}</p>${charCount(s.vision)}</div>
-  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">ガクチカ</h3>
-  ${g.length===0 ? '<div class="empty">まだ登録なし</div>' : g.map(item=>`
+  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:30px;">
+    <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">ガクチカ</h3>
+    ${g.length>1 ? `<div class="pr-tabs">${g.map((item,i)=>`<button type="button" class="pr-tab gaku-tab ${i===gakuchikaIndex?'active':''}" data-idx="${i}">パターン${i+1}</button>`).join('')}</div>` : ''}
+  </div>
+  ${g.length===0 ? '<div class="empty">まだ登録なし</div>' : (()=>{
+    const item = g[gakuchikaIndex] || g[0];
+    return `
     <div class="card">
       <h3>${esc(item.title) || '（無題）'}</h3>
       <p class="body">${nl2br(item.content)}</p>${charCount(item.content)}
@@ -419,7 +431,8 @@ function renderSelf(){
         <div class="qa-pair"><button type="button" class="qa-q">${esc(qa.q)}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${esc(qa.a)}</div></div></div></div>
       `).join('')}
     </div>
-  `).join('')}
+  `;
+  })()}
   ${(s.generalQA && s.generalQA.length) ? `
     <div class="card">
       <h3>面接での対応例（全般）</h3>
