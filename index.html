@@ -291,10 +291,19 @@ function nl2br(str){ return esc(str).replace(/\n/g,'<br>'); }
 function charCount(str){ return `<div class="char-count">${(str||'').length}文字</div>`; }
 function animateHeight(el, newHtml){
   if(!el) return;
+  if(el._heightDone){
+    el.removeEventListener('transitionend', el._heightDone);
+    el._heightDone = null;
+    el.style.transition = 'none';
+    el.style.height = '';
+    el.style.overflow = '';
+    void el.offsetHeight;
+  }
   const oldHeight = el.getBoundingClientRect().height;
   el.innerHTML = newHtml;
   const newHeight = el.getBoundingClientRect().height;
   if(Math.abs(oldHeight - newHeight) < 1) return;
+  el.style.transition = 'none';
   el.style.height = oldHeight + 'px';
   el.style.overflow = 'hidden';
   void el.offsetHeight;
@@ -306,7 +315,9 @@ function animateHeight(el, newHtml){
     el.style.overflow = '';
     el.style.transition = '';
     el.removeEventListener('transitionend', done);
+    el._heightDone = null;
   };
+  el._heightDone = done;
   el.addEventListener('transitionend', done);
 }
 
