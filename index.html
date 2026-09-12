@@ -307,15 +307,72 @@ async function init(){
   render();
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    if(btn.classList.contains('active')) return;
+document.body.addEventListener('click', (e)=>{
+  const tabBtn = e.target.closest('.tab-btn');
+  if(tabBtn){
+    if(tabBtn.classList.contains('active')) return;
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentTab = btn.dataset.tab;
-    moveIndicator(btn);
+    tabBtn.classList.add('active');
+    currentTab = tabBtn.dataset.tab;
+    moveIndicator(tabBtn);
     render(true);
-  });
+    return;
+  }
+  const gakuTab = e.target.closest('.gaku-tab');
+  if(gakuTab){ gakuchikaIndex = parseInt(gakuTab.dataset.idx); updateGakuchika(); return; }
+
+  const prTab = e.target.closest('.pr-tab');
+  if(prTab){ prVariantIndex = parseInt(prTab.dataset.idx); updatePR(); return; }
+
+  const carPrev = e.target.closest('#carPrev');
+  if(carPrev){
+    const bank = (data.self && data.self.interviewBank) || [];
+    if(bank.length){ interviewIndex = (interviewIndex - 1 + bank.length) % bank.length; updateCarousel(); }
+    return;
+  }
+  const carNext = e.target.closest('#carNext');
+  if(carNext){
+    const bank = (data.self && data.self.interviewBank) || [];
+    if(bank.length){ interviewIndex = (interviewIndex + 1) % bank.length; updateCarousel(); }
+    return;
+  }
+  const sortTh = e.target.closest('th[data-sort]');
+  if(sortTh){ setSort(sortTh.dataset.sort); return; }
+
+  const sortDirBtn = e.target.closest('#sortDirBtn');
+  if(sortDirBtn){ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; updateCompanyTable(); return; }
+
+  const calNav = e.target.closest('.cal-nav');
+  if(calNav){ shiftMonth(parseInt(calNav.dataset.shift)); return; }
+
+  const qaQ = e.target.closest('.qa-q');
+  if(qaQ){
+    const wrap = qaQ.nextElementSibling;
+    const isOpen = wrap.classList.toggle('open');
+    qaQ.classList.toggle('open', isOpen);
+    return;
+  }
+});
+document.body.addEventListener('change', (e)=>{
+  const sel = e.target.closest('#sortKeySelect');
+  if(sel){ sort.key = sel.value; updateCompanyTable(); return; }
+});
+let touchStartX = null;
+document.body.addEventListener('touchstart', (e)=>{
+  if(e.target.closest('#interviewCarousel')) touchStartX = e.touches[0].clientX;
+}, {passive:true});
+document.body.addEventListener('touchend', (e)=>{
+  if(touchStartX===null) return;
+  if(e.target.closest('#interviewCarousel')){
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const bank = (data.self && data.self.interviewBank) || [];
+    if(Math.abs(dx) > 40 && bank.length){
+      if(dx < 0) interviewIndex = (interviewIndex + 1) % bank.length;
+      else interviewIndex = (interviewIndex - 1 + bank.length) % bank.length;
+      updateCarousel();
+    }
+  }
+  touchStartX = null;
 });
 function moveIndicator(btn){
   const ind = document.getElementById('tab-indicator');
@@ -338,59 +395,6 @@ function render(skipAnim){
   else if(currentTab==='intern') main.innerHTML = renderIntern();
   else if(currentTab==='skill') main.innerHTML = renderSkill();
   else if(currentTab==='calendar') main.innerHTML = renderCalendar();
-  document.querySelectorAll('th[data-sort]').forEach(th=>{
-    th.addEventListener('click', ()=>{ setSort(th.dataset.sort); });
-  });
-  document.querySelectorAll('.cal-nav').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ shiftMonth(parseInt(btn.dataset.shift)); });
-  });
-  const sortKeySelect = document.getElementById('sortKeySelect');
-  if(sortKeySelect){
-    sortKeySelect.addEventListener('change', ()=>{ sort.key = sortKeySelect.value; render(true); });
-  }
-  const sortDirBtn = document.getElementById('sortDirBtn');
-  if(sortDirBtn){
-    sortDirBtn.addEventListener('click', ()=>{ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; render(true); });
-  }
-  document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      prVariantIndex = parseInt(btn.dataset.idx);
-      render(true);
-    });
-  });
-  document.querySelectorAll('.gaku-tab').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      gakuchikaIndex = parseInt(btn.dataset.idx);
-      render(true);
-    });
-  });
-  const carPrev = document.getElementById('carPrev');
-  const carNext = document.getElementById('carNext');
-  const bankLen = (data.self && data.self.interviewBank) ? data.self.interviewBank.length : 0;
-  if(carPrev) carPrev.addEventListener('click', ()=>{ interviewIndex = (interviewIndex - 1 + bankLen) % bankLen; render(true); });
-  if(carNext) carNext.addEventListener('click', ()=>{ interviewIndex = (interviewIndex + 1) % bankLen; render(true); });
-  const carousel = document.getElementById('interviewCarousel');
-  if(carousel){
-    let touchStartX = null;
-    carousel.addEventListener('touchstart', (e)=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
-    carousel.addEventListener('touchend', (e)=>{
-      if(touchStartX === null) return;
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      if(Math.abs(dx) > 40){
-        if(dx < 0) interviewIndex = (interviewIndex + 1) % bankLen;
-        else interviewIndex = (interviewIndex - 1 + bankLen) % bankLen;
-        render(true);
-      }
-      touchStartX = null;
-    });
-  }
-  document.querySelectorAll('.qa-q').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const wrap = btn.nextElementSibling;
-      const isOpen = wrap.classList.toggle('open');
-      btn.classList.toggle('open', isOpen);
-    });
-  });
   if(!skipAnim){
     main.classList.remove('fade-out');
     void main.offsetWidth;
@@ -448,12 +452,7 @@ function renderSelf(){
       <h3 style="margin:0;">自己PR</h3>
       ${(s.prVariants && s.prVariants.length>1) ? `<div class="pr-tabs">${s.prVariants.map((v,i)=>`<button type="button" class="pr-tab ${i===prVariantIndex?'active':''}" data-idx="${i}">${esc(v.label)}</button>`).join('')}</div>` : ''}
     </div>
-    ${(()=>{
-      const variants = s.prVariants && s.prVariants.length ? s.prVariants : (s.pr ? [{label:'自己PR', text:s.pr}] : []);
-      const cur = variants[prVariantIndex] || variants[0];
-      const text = cur ? cur.text : '';
-      return `<p class="body" style="margin-top:14px;">${text ? nl2br(text) : '<span class="muted">未入力</span>'}</p>${charCount(text)}`;
-    })()}
+    <div id="prBody">${prBodyHtml(s)}</div>
   </div>
   <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
@@ -463,9 +462,28 @@ function renderSelf(){
     <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">ガクチカ</h3>
     ${g.length>1 ? `<div class="pr-tabs">${g.map((item,i)=>`<button type="button" class="pr-tab gaku-tab ${i===gakuchikaIndex?'active':''}" data-idx="${i}">パターン${i+1}</button>`).join('')}</div>` : ''}
   </div>
-  ${g.length===0 ? '<div class="empty">まだ登録なし</div>' : (()=>{
-    const item = g[gakuchikaIndex] || g[0];
-    return `
+  <div id="gakuBody">${gakuBodyHtml(g)}</div>
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
+  ${renderInterviewCarousel(s.interviewBank)}
+  `;
+}
+function prBodyHtml(s){
+  const variants = s.prVariants && s.prVariants.length ? s.prVariants : (s.pr ? [{label:'自己PR', text:s.pr}] : []);
+  const cur = variants[prVariantIndex] || variants[0];
+  const text = cur ? cur.text : '';
+  return `<p class="body" style="margin-top:14px;">${text ? nl2br(text) : '<span class="muted">未入力</span>'}</p>${charCount(text)}`;
+}
+function updatePR(){
+  document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(b=>{
+    b.classList.toggle('active', parseInt(b.dataset.idx)===prVariantIndex);
+  });
+  const box = document.getElementById('prBody');
+  if(box) box.innerHTML = prBodyHtml(data.self || {});
+}
+function gakuBodyHtml(g){
+  if(!g.length) return '<div class="empty">まだ登録なし</div>';
+  const item = g[gakuchikaIndex] || g[0];
+  return `
     <div class="card">
       <h3>${esc(item.title) || '（無題）'}</h3>
       <p class="body">${nl2br(item.content)}</p>${charCount(item.content)}
@@ -475,35 +493,54 @@ function renderSelf(){
       `).join('')}
     </div>
   `;
-  })()}
-  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
-  ${renderInterviewCarousel(s.interviewBank)}
+}
+function updateGakuchika(){
+  document.querySelectorAll('.gaku-tab').forEach(b=>{
+    b.classList.toggle('active', parseInt(b.dataset.idx)===gakuchikaIndex);
+  });
+  const box = document.getElementById('gakuBody');
+  if(box) box.innerHTML = gakuBodyHtml((data.self && data.self.gakuchika) || []);
+}
+function carouselCatMeta(item){
+  const catMeta = {
+    general: {label:'一般的な質問', cls:'general'},
+    es: {label:'ES内容からの深掘り', cls:'es'},
+    company: {label:'企業の過去の質問', cls:'company'}
+  };
+  return catMeta[item.category] || catMeta.general;
+}
+function carouselCardHtml(item){
+  const meta = carouselCatMeta(item);
+  return `
+      <span class="carousel-cat ${meta.cls}">${meta.label}</span>
+      <div class="carousel-q">${esc(item.q)}</div>
+      <div class="carousel-a">${nl2br(item.a)}</div>
+      ${item.source ? `<div class="carousel-source">出典：${esc(item.source)}</div>` : ''}
   `;
 }
 function renderInterviewCarousel(bank){
   if(!bank || !bank.length) return '<div class="empty">まだ登録なし</div>';
   const idx = ((interviewIndex % bank.length) + bank.length) % bank.length;
   const item = bank[idx];
-  const catMeta = {
-    general: {label:'一般的な質問', cls:'general'},
-    es: {label:'ES内容からの深掘り', cls:'es'},
-    company: {label:'企業の過去の質問', cls:'company'}
-  };
-  const meta = catMeta[item.category] || catMeta.general;
   return `
   <div class="carousel" id="interviewCarousel">
-    <div class="carousel-card">
-      <span class="carousel-cat ${meta.cls}">${meta.label}</span>
-      <div class="carousel-q">${esc(item.q)}</div>
-      <div class="carousel-a">${nl2br(item.a)}</div>
-      ${item.source ? `<div class="carousel-source">出典：${esc(item.source)}</div>` : ''}
-    </div>
+    <div class="carousel-card" id="carouselCard">${carouselCardHtml(item)}</div>
     <div class="carousel-nav">
       <button type="button" class="carousel-btn" id="carPrev">‹</button>
-      <span class="carousel-counter">${idx+1} / ${bank.length}</span>
+      <span class="carousel-counter" id="carCounter">${idx+1} / ${bank.length}</span>
       <button type="button" class="carousel-btn" id="carNext">›</button>
     </div>
   </div>`;
+}
+function updateCarousel(){
+  const bank = (data.self && data.self.interviewBank) || [];
+  if(!bank.length) return;
+  const idx = ((interviewIndex % bank.length) + bank.length) % bank.length;
+  const item = bank[idx];
+  const cardEl = document.getElementById('carouselCard');
+  if(cardEl) cardEl.innerHTML = carouselCardHtml(item);
+  const counterEl = document.getElementById('carCounter');
+  if(counterEl) counterEl.textContent = `${idx+1} / ${bank.length}`;
 }
 
 function renderDesiredConditions(text){
@@ -566,8 +603,8 @@ const COL_DEFS = [
   {key:'memo', label:'メモ', type:'text'},
 ];
 
-function renderCompany(){
-  let list = [...(data.companies||[])];
+function sortCompanies(arr){
+  const list = [...arr];
   list.sort((a,b)=>{
     const def = COL_DEFS.find(c=>c.key===sort.key);
     let va = a[sort.key], vb = b[sort.key];
@@ -575,9 +612,12 @@ function renderCompany(){
     va = (va||'').toString(); vb = (vb||'').toString();
     return sort.dir==='asc' ? va.localeCompare(vb,'ja') : vb.localeCompare(va,'ja');
   });
-  const rows = list.map(c=>`
-    <tr>
-      <td data-label="企業名">${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
+  return list;
+}
+function companyRow(c){
+  return `
+    <tr class="${c.favorite ? 'fav-row' : ''}">
+      <td data-label="企業名">${c.favorite ? '<span class="fav-star">★</span> ' : ''}${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
       <td data-label="業界">${esc(c.industry)}</td>
       <td data-label="本拠地">${esc(c.location)}</td>
       <td data-label="院卒初任給(月給/円)">${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
@@ -588,7 +628,22 @@ function renderCompany(){
       <td data-label="選考状況">${statusPill(c.status)}</td>
       <td data-label="メモ">${esc(c.memo)}</td>
     </tr>
-  `).join('');
+  `;
+}
+function companyRowsHtml(){
+  const all = data.companies || [];
+  const favs = sortCompanies(all.filter(c=>c.favorite));
+  const rest = sortCompanies(all.filter(c=>!c.favorite));
+  let rows = '';
+  if(favs.length){
+    rows += `<tr class="fav-divider-row"><td colspan="10">★ お気に入り</td></tr>`;
+    rows += favs.map(companyRow).join('');
+    if(rest.length) rows += `<tr class="fav-divider-row"><td colspan="10">その他の企業</td></tr>`;
+  }
+  rows += rest.map(companyRow).join('');
+  return rows || `<tr><td colspan="10"><div class="empty">まだ企業が登録されてない</div></td></tr>`;
+}
+function renderCompany(){
   return `
   <div class="section-head"><h1>企業一覧</h1><p>列名クリックで並び替え。企業名リンクは各社の採用ページへ</p></div>
   <div class="sort-mobile">
@@ -601,7 +656,7 @@ function renderCompany(){
     <thead><tr>
       ${COL_DEFS.map(c=>`<th data-sort="${c.key}">${c.label}${sort.key===c.key ? `<span class="arrow">${sort.dir==='asc'?'▲':'▼'}</span>`:''}</th>`).join('')}
     </tr></thead>
-    <tbody>${rows || `<tr><td colspan="10"><div class="empty">まだ企業が登録されてない</div></td></tr>`}</tbody>
+    <tbody id="companyTbody">${companyRowsHtml()}</tbody>
   </table></div>
   `;
 }
@@ -611,7 +666,22 @@ function statusPill(status){
 }
 function setSort(key){
   if(sort.key===key) sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; else { sort.key = key; sort.dir = 'asc'; }
-  render(true);
+  updateCompanyTable();
+}
+function updateCompanyTable(){
+  const tbody = document.getElementById('companyTbody');
+  if(!tbody) return;
+  tbody.innerHTML = companyRowsHtml();
+  document.querySelectorAll('th[data-sort]').forEach(th=>{
+    const key = th.dataset.sort;
+    const def = COL_DEFS.find(c=>c.key===key);
+    const label = def ? def.label : key;
+    th.innerHTML = sort.key===key ? `${label}<span class="arrow">${sort.dir==='asc'?'▲':'▼'}</span>` : label;
+  });
+  const sel = document.getElementById('sortKeySelect');
+  if(sel) sel.value = sort.key;
+  const dirBtn = document.getElementById('sortDirBtn');
+  if(dirBtn) dirBtn.textContent = sort.dir==='asc' ? '昇順 ▲' : '降順 ▼';
 }
 
 function renderIntern(){
@@ -704,7 +774,7 @@ function gcalEmbedUrl(){
   const srcParams = GCAL_IDS.map(id=>`src=${encodeURIComponent(id)}`).join('&');
   return `https://calendar.google.com/calendar/embed?${srcParams}&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showNav=1&showTabs=0&showCalendars=0&showTz=0&showPrint=0&bgcolor=%23101010`;
 }
-function renderCalendar(){
+function calGridHtml(){
   const evts = collectEvents();
   const y = calState.year, m = calState.month;
   const first = new Date(y, m, 1);
@@ -719,6 +789,11 @@ function renderCalendar(){
     const dayEvts = evts.filter(e=>e.date===dateStr);
     cells += `<div class="cal-cell ${dateStr===todayStr?'today':''}"><div class="daynum">${d}</div>${dayEvts.map(e=>`<div class="cal-evt ${e.type}">${esc(e.label)}</div>`).join('')}</div>`;
   }
+  return { html: dow.map(d=>`<div class="cal-dow">${d}</div>`).join('') + cells, empty: evts.length===0 };
+}
+function renderCalendar(){
+  const y = calState.year, m = calState.month;
+  const grid = calGridHtml();
   return `
   <div class="section-head"><h1>カレンダー</h1><p>Googleカレンダー(就活・イベント)を反映</p></div>
   <div class="gcal-wrap">
@@ -727,21 +802,30 @@ function renderCalendar(){
   <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin:30px 0 14px; letter-spacing:-0.01em;">インターン開始日カレンダー</h3>
   <div class="cal-head">
     <button class="cal-nav" data-shift="-1">← 前月</button>
-    <h2>${y}年 ${m+1}月</h2>
+    <h2 id="calMonthLabel">${y}年 ${m+1}月</h2>
     <button class="cal-nav" data-shift="1">次月 →</button>
   </div>
   <div class="cal-legend">
     <span><i style="background:var(--accent-lime);"></i>インターン</span>
   </div>
-  <div class="cal-grid">${dow.map(d=>`<div class="cal-dow">${d}</div>`).join('')}${cells}</div>
-  ${evts.length===0 ? '<div class="empty" style="margin-top:16px;">まだ予定なし</div>' : ''}
+  <div class="cal-grid" id="calGrid">${grid.html}</div>
+  <div id="calEmptyMsg">${grid.empty ? '<div class="empty" style="margin-top:16px;">まだ予定なし</div>' : ''}</div>
   `;
 }
 function shiftMonth(diff){
   calState.month += diff;
   if(calState.month<0){ calState.month=11; calState.year--; }
   if(calState.month>11){ calState.month=0; calState.year++; }
-  render(true);
+  updateCalendar();
+}
+function updateCalendar(){
+  const labelEl = document.getElementById('calMonthLabel');
+  if(labelEl) labelEl.textContent = `${calState.year}年 ${calState.month+1}月`;
+  const grid = calGridHtml();
+  const gridEl = document.getElementById('calGrid');
+  if(gridEl) gridEl.innerHTML = grid.html;
+  const emptyEl = document.getElementById('calEmptyMsg');
+  if(emptyEl) emptyEl.innerHTML = grid.empty ? '<div class="empty" style="margin-top:16px;">まだ予定なし</div>' : '';
 }
 
 init();
