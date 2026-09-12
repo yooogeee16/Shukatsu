@@ -458,5 +458,63 @@
       "url": "https://technoffer.jp/",
       "tag": "逆スカウト型"
     }
+  ],
+  "projects": [
+    {
+      "id": "proj-past-exam",
+      "name": "past-exam-app-showcase",
+      "tech": "Python / Streamlit / Gemini API",
+      "desc": "大学院入試の過去問演習アプリ。ソースコードのみ公開、過去問データは非公開。自己PRで言及している「院対策Webアプリ」本体。",
+      "url": "https://github.com/yooogeee16/past-exam-app-showcase",
+      "highlight": true
+    },
+    {
+      "id": "proj-lab-attendance",
+      "name": "lab-attendance-app",
+      "tech": "Vue3 / Tauri / Firebase",
+      "desc": "研究室メンバーの在室状況をリアルタイム共有するデスクトップアプリ。自己PRで言及している「在室管理アプリ」本体。",
+      "url": "https://github.com/yooogeee16/lab-attendance-app",
+      "highlight": true
+    },
+    {
+      "id": "proj-concierge",
+      "name": "concierge",
+      "tech": "JavaScript / Electron",
+      "desc": "画面の文字をクリック/なぞるだけで解説してくれる透明デスクトップ・コンシェルジュ。コード解説とPokédex風のコード図鑑つき。",
+      "url": "https://github.com/yooogeee16/concierge",
+      "highlight": false
+    },
+    {
+      "id": "proj-term-invaders",
+      "name": "term-invaders",
+      "tech": "HTML / JavaScript",
+      "desc": "スペースインベーダー風に遊びながら応用情報技術者試験の用語を覚えられる学習ゲーム。",
+      "url": "https://github.com/yooogeee16/term-invaders",
+      "highlight": false
+    },
+    {
+      "id": "proj-time-is-money",
+      "name": "time-is-money",
+      "tech": "TypeScript / Next.js",
+      "desc": "勉強時間を計測すると『真実の口』からコインが降ってくる、ポモドーロ対応の学習タイマーWebアプリ。",
+      "url": "https://github.com/yooogeee16/time-is-money",
+      "highlight": false
+    },
+    {
+      "id": "proj-idea-bubble",
+      "name": "idea-bubble",
+      "tech": "TypeScript",
+      "desc": "アイデアをバブルとして可視化し、ドラッグして重ねると新しい発想が生まれる発想支援Webアプリ。",
+      "url": "https://github.com/yooogeee16/idea-bubble",
+      "highlight": false
+    },
+    {
+      "id": "proj-desktop-pet",
+      "name": "desktop-pet",
+      "tech": "JavaScript",
+      "desc": "デスクトップに常駐して動くデスクトップペットアプリ。",
+      "url": "https://github.com/yooogeee16/desktop-pet",
+      "highlight": false
+    }
   ]
 }
