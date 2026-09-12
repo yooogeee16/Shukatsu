@@ -143,6 +143,7 @@
   .platform-tag{font-size:11px; font-weight:700; padding:3px 12px; border-radius:20px; white-space:nowrap;}
   .gcal-wrap{border:1px solid var(--border-soft); border-radius:10px; overflow:hidden; background:#101010;}
   .gcal-wrap iframe{display:block;}
+  .char-count{font-size:11px; color:var(--ink-faint); margin-top:8px; text-align:right;}
   .tag-scout{background:rgba(126,231,135,.1); color:var(--accent-lime); border:1px solid rgba(126,231,135,.3);}
   .tag-info{background:rgba(94,184,255,.1); color:var(--accent-cyan); border:1px solid rgba(94,184,255,.3);}
 
@@ -240,6 +241,7 @@
 <script>
 function esc(str){ return (str ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function nl2br(str){ return esc(str).replace(/\n/g,'<br>'); }
+function charCount(str){ return `<div class="char-count">${(str||'').length}文字</div>`; }
 
 let data = { self:{}, industries:[], companies:[], interns:[], quals:[], activities:[] };
 let currentTab = 'self';
@@ -345,16 +347,16 @@ function renderSelf(){
   const g = s.gakuchika || [];
   return `
   <div class="section-head"><h1>自己分析</h1><p>強み・弱み・自己PR・学歴・ガクチカ</p></div>
-  <div class="card"><h3>自己PR</h3><p class="body">${s.pr ? nl2br(s.pr) : '<span class="muted">未入力</span>'}</p></div>
+  <div class="card"><h3>自己PR</h3><p class="body">${s.pr ? nl2br(s.pr) : '<span class="muted">未入力</span>'}</p>${charCount(s.pr)}</div>
   <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
-  <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p></div>
-  <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p></div>
-  <div class="card"><h3>これからやってみたいこと</h3><p class="body">${s.vision ? nl2br(s.vision) : '<span class="muted">未入力</span>'}</p></div>
+  <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
+  <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p>${charCount(s.weaknesses)}</div>
+  <div class="card"><h3>これからやってみたいこと</h3><p class="body">${s.vision ? nl2br(s.vision) : '<span class="muted">未入力</span>'}</p>${charCount(s.vision)}</div>
   <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">ガクチカ</h3>
   ${g.length===0 ? '<div class="empty">まだ登録なし</div>' : g.map(item=>`
     <div class="card">
       <h3>${esc(item.title) || '（無題）'}</h3>
-      <p class="body">${nl2br(item.content)}</p>
+      <p class="body">${nl2br(item.content)}</p>${charCount(item.content)}
       ${(item.qa && item.qa.length) ? `<div class="qa-section-title">面接での対応例</div>` : ''}
       ${(item.qa||[]).map(qa=>`
         <div class="qa-pair"><button type="button" class="qa-q">${esc(qa.q)}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${esc(qa.a)}</div></div></div></div>
@@ -400,10 +402,10 @@ function renderResearch(){
   return `
   <div class="section-head"><h1>研究</h1><p>研究テーマ・内容・意義</p></div>
   <div class="card"><h3>${esc(r.title) || '研究テーマ'}</h3></div>
-  <div class="card"><h3>研究概要</h3><p class="body">${nl2br(r.overview)}</p></div>
-  <div class="card"><h3>研究の意義</h3><p class="body">${nl2br(r.significance)}</p></div>
-  <div class="card"><h3>研究を選んだ理由</h3><p class="body">${nl2br(r.reason)}</p></div>
-  <div class="card"><h3>研究から学んだこと</h3><p class="body">${nl2br(r.learned)}</p></div>
+  <div class="card"><h3>研究概要</h3><p class="body">${nl2br(r.overview)}</p>${charCount(r.overview)}</div>
+  <div class="card"><h3>研究の意義</h3><p class="body">${nl2br(r.significance)}</p>${charCount(r.significance)}</div>
+  <div class="card"><h3>研究を選んだ理由</h3><p class="body">${nl2br(r.reason)}</p>${charCount(r.reason)}</div>
+  <div class="card"><h3>研究から学んだこと</h3><p class="body">${nl2br(r.learned)}</p>${charCount(r.learned)}</div>
   `;
 }
 function renderIndustry(){
