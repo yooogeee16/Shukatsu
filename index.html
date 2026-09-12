@@ -152,6 +152,29 @@
   .platform-item:hover{border-color:var(--accent-cyan); background:var(--surface);}
   .platform-name{font-weight:700; font-size:14px; color:var(--ink);}
   .platform-tag{font-size:11px; font-weight:700; padding:3px 12px; border-radius:20px; white-space:nowrap;}
+  /* --- 面接想定問答カルーセル --- */
+  .carousel-card{
+    background:var(--card); border:1px solid var(--border-soft); border-radius:10px;
+    padding:22px 24px; min-height:170px; display:flex; flex-direction:column;
+  }
+  .carousel-cat{
+    align-self:flex-start; font-size:10.5px; letter-spacing:0.05em; padding:3px 11px;
+    border-radius:20px; margin-bottom:12px; font-weight:700;
+  }
+  .carousel-cat.general{background:rgba(94,184,255,.1); color:var(--accent-cyan); border:1px solid rgba(94,184,255,.3);}
+  .carousel-cat.es{background:rgba(126,231,135,.1); color:var(--accent-lime); border:1px solid rgba(126,231,135,.3);}
+  .carousel-cat.company{background:rgba(255,92,92,.1); color:var(--accent-red); border:1px solid rgba(255,92,92,.3);}
+  .carousel-q{font-size:15px; font-weight:700; color:var(--ink); margin-bottom:12px; line-height:1.55;}
+  .carousel-a{font-size:13.5px; color:#c9d1d8; line-height:1.75; white-space:pre-wrap; flex:1;}
+  .carousel-source{font-size:11px; color:var(--ink-faint); margin-top:14px; padding-top:10px; border-top:1px solid var(--border-soft);}
+  .carousel-nav{display:flex; align-items:center; justify-content:space-between; margin-top:14px;}
+  .carousel-btn{
+    background:transparent; border:1px solid var(--border); color:var(--ink-soft); border-radius:50%;
+    width:38px; height:38px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center;
+    transition:all .15s ease; flex-shrink:0;
+  }
+  .carousel-btn:hover{border-color:var(--accent-cyan); color:var(--ink); background:var(--surface);}
+  .carousel-counter{font-size:12px; color:var(--ink-faint); letter-spacing:0.02em;}
   .gcal-wrap{border:1px solid var(--border-soft); border-radius:10px; overflow:hidden; background:#101010;}
   .gcal-wrap iframe{display:block;}
   .char-count{font-size:11px; color:var(--ink-faint); margin-top:8px; text-align:right;}
@@ -343,6 +366,26 @@ function render(){
       render();
     });
   });
+  const carPrev = document.getElementById('carPrev');
+  const carNext = document.getElementById('carNext');
+  const bankLen = (data.self && data.self.interviewBank) ? data.self.interviewBank.length : 0;
+  if(carPrev) carPrev.addEventListener('click', ()=>{ interviewIndex = (interviewIndex - 1 + bankLen) % bankLen; render(); });
+  if(carNext) carNext.addEventListener('click', ()=>{ interviewIndex = (interviewIndex + 1) % bankLen; render(); });
+  const carousel = document.getElementById('interviewCarousel');
+  if(carousel){
+    let touchStartX = null;
+    carousel.addEventListener('touchstart', (e)=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+    carousel.addEventListener('touchend', (e)=>{
+      if(touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if(Math.abs(dx) > 40){
+        if(dx < 0) interviewIndex = (interviewIndex + 1) % bankLen;
+        else interviewIndex = (interviewIndex - 1 + bankLen) % bankLen;
+        render();
+      }
+      touchStartX = null;
+    });
+  }
   document.querySelectorAll('.qa-q').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const wrap = btn.nextElementSibling;
@@ -433,15 +476,34 @@ function renderSelf(){
     </div>
   `;
   })()}
-  ${(s.generalQA && s.generalQA.length) ? `
-    <div class="card">
-      <h3>面接での対応例（全般）</h3>
-      ${s.generalQA.map(qa=>`
-        <div class="qa-pair"><button type="button" class="qa-q">${esc(qa.q)}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${esc(qa.a)}</div></div></div></div>
-      `).join('')}
-    </div>
-  ` : ''}
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
+  ${renderInterviewCarousel(s.interviewBank)}
   `;
+}
+function renderInterviewCarousel(bank){
+  if(!bank || !bank.length) return '<div class="empty">まだ登録なし</div>';
+  const idx = ((interviewIndex % bank.length) + bank.length) % bank.length;
+  const item = bank[idx];
+  const catMeta = {
+    general: {label:'一般的な質問', cls:'general'},
+    es: {label:'ES内容からの深掘り', cls:'es'},
+    company: {label:'企業の過去の質問', cls:'company'}
+  };
+  const meta = catMeta[item.category] || catMeta.general;
+  return `
+  <div class="carousel" id="interviewCarousel">
+    <div class="carousel-card">
+      <span class="carousel-cat ${meta.cls}">${meta.label}</span>
+      <div class="carousel-q">${esc(item.q)}</div>
+      <div class="carousel-a">${nl2br(item.a)}</div>
+      ${item.source ? `<div class="carousel-source">出典：${esc(item.source)}</div>` : ''}
+    </div>
+    <div class="carousel-nav">
+      <button type="button" class="carousel-btn" id="carPrev">‹</button>
+      <span class="carousel-counter">${idx+1} / ${bank.length}</span>
+      <button type="button" class="carousel-btn" id="carNext">›</button>
+    </div>
+  </div>`;
 }
 
 function renderDesiredConditions(text){
