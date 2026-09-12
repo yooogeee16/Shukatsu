@@ -346,11 +346,11 @@ function render(skipAnim){
   });
   const sortKeySelect = document.getElementById('sortKeySelect');
   if(sortKeySelect){
-    sortKeySelect.addEventListener('change', ()=>{ sort.key = sortKeySelect.value; render(); });
+    sortKeySelect.addEventListener('change', ()=>{ sort.key = sortKeySelect.value; render(true); });
   }
   const sortDirBtn = document.getElementById('sortDirBtn');
   if(sortDirBtn){
-    sortDirBtn.addEventListener('click', ()=>{ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; render(); });
+    sortDirBtn.addEventListener('click', ()=>{ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; render(true); });
   }
   document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(btn=>{
     btn.addEventListener('click', ()=>{
