@@ -588,6 +588,18 @@ function renderSkill(){
   ${acts.length===0 ? '<div class="empty">まだ登録なし</div>' : acts.map(a=>`
     <div class="card"><h3>${esc(a.title)} <span class="muted" style="font-weight:400; font-size:13px;">${esc(a.date)}</span></h3><p class="body">${nl2br(a.content)}</p></div>
   `).join('')}
+
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">個人開発・制作物</h3>
+  ${(data.projects||[]).length===0 ? '<div class="empty">まだ登録なし</div>' : data.projects.map(p=>`
+    <div class="card" style="${p.highlight?'border-color:var(--accent-lime);':''}">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+        <h3><a href="${esc(p.url)}" target="_blank" rel="noopener" class="company-link">${esc(p.name)}</a></h3>
+        ${p.highlight ? `<span class="qual-note" style="color:var(--accent-lime); border-color:rgba(126,231,135,.3); background:rgba(126,231,135,.08);">自己PRで言及</span>` : ''}
+      </div>
+      <div class="muted" style="margin-bottom:8px;">${esc(p.tech)}</div>
+      <p class="body">${nl2br(p.desc)}</p>
+    </div>
+  `).join('')}
   `;
 }
 
