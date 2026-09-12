@@ -314,10 +314,7 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.classList.add('active');
     currentTab = btn.dataset.tab;
     moveIndicator(btn);
-    const main = document.getElementById('main');
-    main.classList.remove('fade-in');
-    main.classList.add('fade-out');
-    setTimeout(()=>{ render(); }, 110);
+    render(true);
   });
 });
 function moveIndicator(btn){
@@ -614,7 +611,7 @@ function statusPill(status){
 }
 function setSort(key){
   if(sort.key===key) sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; else { sort.key = key; sort.dir = 'asc'; }
-  render();
+  render(true);
 }
 
 function renderIntern(){
@@ -744,7 +741,7 @@ function shiftMonth(diff){
   calState.month += diff;
   if(calState.month<0){ calState.month=11; calState.year--; }
   if(calState.month>11){ calState.month=0; calState.year++; }
-  render();
+  render(true);
 }
 
 init();
