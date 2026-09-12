@@ -105,7 +105,8 @@
       "status": "未応募",
       "memo": "従業員数207,548人／有価証券報告書ベース（2025年3月期）。新卒初任給は学部卒約26.9万円、院卒はやや高め",
       "location": "大阪府門真市（本社）",
-      "careerUrl": "https://recruit.jpn.panasonic.com/newgrads/"
+      "careerUrl": "https://recruit.jpn.panasonic.com/newgrads/",
+      "favorite": false
     },
     {
       "id": "seed-members",
@@ -120,7 +121,8 @@
       "status": "インターン参加",
       "memo": "従業員数2,882人。有価証券報告書ベース（2025年07月時点）の平均年収・平均年齢は概数",
       "location": "東京都中央区（本社）",
-      "careerUrl": "https://recruit.members.co.jp/"
+      "careerUrl": "https://recruit.members.co.jp/",
+      "favorite": false
     },
     {
       "id": "seed-asahi",
@@ -135,7 +137,8 @@
       "status": "インターン参加",
       "memo": "初任給は総合職(リクナビ2024ベース)。年収・平均年齢は全社員平均(有価証券報告書ベース)で新卒とは異なる。人事(滝本さん)から個別会社説明のスカウト連絡あり、日程調整中（7/17以降の平日希望）",
       "location": "東京都中央区（本社）／大阪本社あり（大阪市北区）",
-      "careerUrl": "https://www.asahishimbun-saiyou.com/"
+      "careerUrl": "https://www.asahishimbun-saiyou.com/",
+      "favorite": false
     },
     {
       "id": "seed-rank-1",
@@ -150,7 +153,8 @@
       "holidayDetail": "完全週休2日制（土日）、祝日。グループ会社共通で120日前後が目安（正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高3兆4,902億円、従業員12,714名、ユーザー系（IT系企業売上高ランキング1位）／初任給は修士了。学士卒は30.0万円。有価証券報告書ベース（2025年3月期）",
-      "careerUrl": "https://nttdata-recruit.com/"
+      "careerUrl": "https://nttdata-recruit.com/",
+      "favorite": false
     },
     {
       "id": "seed-rank-2",
@@ -165,7 +169,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高3兆1,765億円、従業員34,977名、メーカー系（同ランキング2位）／院卒初任給。有価証券報告書ベース（2025年3月期）",
-      "careerUrl": "https://fujitsu.recruiting.jp.fujitsu.com/recruit/"
+      "careerUrl": "https://fujitsu.recruiting.jp.fujitsu.com/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-rank-3",
@@ -180,7 +185,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高2兆3,890億円、従業員15,386名、メーカー系（同ランキング3位）／院卒初任給。有価証券報告書ベース（2025年3月期）",
-      "careerUrl": "https://www.hitachi.co.jp/recruit/newgraduate/index.html"
+      "careerUrl": "https://www.hitachi.co.jp/recruit/newgraduate/index.html",
+      "favorite": false
     },
     {
       "id": "seed-rank-4",
@@ -195,7 +201,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高1兆7,755億円、従業員22,036名、メーカー系（同ランキング4位）／修士卒初任給（2024年入社時点）。有価証券報告書ベース（2025年3月期）",
-      "careerUrl": "https://jpn.nec.com/recruit/newgraduate/index.html"
+      "careerUrl": "https://jpn.nec.com/recruit/newgraduate/index.html",
+      "favorite": false
     },
     {
       "id": "seed-rank-5",
@@ -210,7 +217,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高1兆1,257億円、従業員29,500名、ユーザー系（同ランキング5位）／院卒初任給。年収・年齢は口コミベース（OpenWork等）で有報値ではない点に注意",
-      "careerUrl": "https://connect.panasonic.com/jp-ja/recruit/"
+      "careerUrl": "https://connect.panasonic.com/jp-ja/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-rank-6",
@@ -225,7 +233,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高8,610億円、従業員7,524名、独立系（同ランキング6位）",
-      "careerUrl": "https://jinzai.otsuka-shokai.co.jp/shinsotsu/"
+      "careerUrl": "https://jinzai.otsuka-shokai.co.jp/shinsotsu/",
+      "favorite": false
     },
     {
       "id": "seed-rank-7",
@@ -240,7 +249,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高6,921億円、従業員6,782名、コンサル系（同ランキング7位）／院卒初任給（住宅手当6万円込み・一律支給）。有価証券報告書ベース（2026年3月期）",
-      "careerUrl": "https://working.nri.co.jp/recruit/"
+      "careerUrl": "https://working.nri.co.jp/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-rank-8",
@@ -255,7 +265,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高6,493億円、従業員数非公開、メーカー系（同ランキング8位）",
-      "careerUrl": "https://www.ibm.com/jp-ja/employment/campus.html"
+      "careerUrl": "https://www.ibm.com/jp-ja/employment/campus.html",
+      "favorite": false
     },
     {
       "id": "seed-rank-9",
@@ -270,7 +281,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高6,457億円、従業員22,000名、コンサル系（同ランキング9位）",
-      "careerUrl": "https://www.accenture.com/jp-ja/careers"
+      "careerUrl": "https://www.accenture.com/jp-ja/careers",
+      "favorite": false
     },
     {
       "id": "seed-rank-10",
@@ -285,7 +297,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高5,527億円、従業員10,000名、メーカー系（同ランキング10位）",
-      "careerUrl": "https://fujitsu.recruiting.jp.fujitsu.com/recruit/"
+      "careerUrl": "https://fujitsu.recruiting.jp.fujitsu.com/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-rank-11",
@@ -300,7 +313,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高5,084億円、従業員5,695名、独立系（同ランキング11位）",
-      "careerUrl": "https://www.tis.co.jp/recruit/"
+      "careerUrl": "https://www.tis.co.jp/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-rank-12",
@@ -315,7 +329,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高4,887億円、従業員4,978名、ユーザー系（同ランキング12位）",
-      "careerUrl": "https://www.ctc-g.co.jp/recruit/newgrads/"
+      "careerUrl": "https://www.ctc-g.co.jp/recruit/newgrads/",
+      "favorite": false
     },
     {
       "id": "seed-rank-13",
@@ -330,7 +345,8 @@
       "holidayDetail": "完全週休2日制（目安、正確な日数は要確認）",
       "status": "未応募",
       "memo": "売上高4,459億円、従業員8,633名、ユーザー系（同ランキング13位）",
-      "careerUrl": "https://www.scsk.jp/recruit/"
+      "careerUrl": "https://www.scsk.jp/recruit/",
+      "favorite": false
     },
     {
       "id": "seed-keyence",
@@ -345,7 +361,8 @@
       "holidays": "129",
       "holidayDetail": "週休2日制（土日祝休み、年2回出勤土曜日あり）、GW・夏季・冬季に各9連休前後の長期休日あり",
       "status": "未応募",
-      "memo": "初任給は修士了30.0万円/学部卒28.0万円（大阪勤務・独身の場合、地域住宅補助3万円込み、2026年度）。平均年収は全社員平均（有価証券報告書ベース、2026年3月期）で新卒とは異なる。ダイヤモンドオンライン「年収が高い会社ランキング2023」で2位"
+      "memo": "初任給は修士了30.0万円/学部卒28.0万円（大阪勤務・独身の場合、地域住宅補助3万円込み、2026年度）。平均年収は全社員平均（有価証券報告書ベース、2026年3月期）で新卒とは異なる。ダイヤモンドオンライン「年収が高い会社ランキング2023」で2位",
+      "favorite": false
     }
   ],
   "interns": [
