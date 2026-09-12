@@ -144,6 +144,13 @@
   .gcal-wrap{border:1px solid var(--border-soft); border-radius:10px; overflow:hidden; background:#101010;}
   .gcal-wrap iframe{display:block;}
   .char-count{font-size:11px; color:var(--ink-faint); margin-top:8px; text-align:right;}
+  .pr-tabs{display:flex; gap:6px;}
+  .pr-tab{
+    background:transparent; border:1px solid var(--border); color:var(--ink-soft); border-radius:20px;
+    padding:5px 14px; font-size:12px; cursor:pointer; font-family:"Noto Sans JP",sans-serif; transition:all .15s ease;
+  }
+  .pr-tab:hover{color:var(--ink); border-color:var(--accent-cyan);}
+  .pr-tab.active{background:var(--accent-cyan); color:#101010; border-color:var(--accent-cyan); font-weight:700;}
   .tag-scout{background:rgba(126,231,135,.1); color:var(--accent-lime); border:1px solid rgba(126,231,135,.3);}
   .tag-info{background:rgba(94,184,255,.1); color:var(--accent-cyan); border:1px solid rgba(94,184,255,.3);}
 
@@ -246,6 +253,7 @@ function charCount(str){ return `<div class="char-count">${(str||'').length}文�
 let data = { self:{}, industries:[], companies:[], interns:[], quals:[], activities:[] };
 let currentTab = 'self';
 let sort = { key:'name', dir:'asc' };
+let prVariantIndex = 0;
 const calState = { year:new Date().getFullYear(), month:new Date().getMonth() };
 
 async function init(){
@@ -308,6 +316,12 @@ function render(){
   if(sortDirBtn){
     sortDirBtn.addEventListener('click', ()=>{ sort.dir = sort.dir==='asc' ? 'desc' : 'asc'; render(); });
   }
+  document.querySelectorAll('.pr-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      prVariantIndex = parseInt(btn.dataset.idx);
+      render();
+    });
+  });
   document.querySelectorAll('.qa-q').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const wrap = btn.nextElementSibling;
@@ -347,7 +361,18 @@ function renderSelf(){
   const g = s.gakuchika || [];
   return `
   <div class="section-head"><h1>自己分析</h1><p>強み・弱み・自己PR・学歴・ガクチカ</p></div>
-  <div class="card"><h3>自己PR</h3><p class="body">${s.pr ? nl2br(s.pr) : '<span class="muted">未入力</span>'}</p>${charCount(s.pr)}</div>
+  <div class="card">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <h3 style="margin:0;">自己PR</h3>
+      ${(s.prVariants && s.prVariants.length>1) ? `<div class="pr-tabs">${s.prVariants.map((v,i)=>`<button type="button" class="pr-tab ${i===prVariantIndex?'active':''}" data-idx="${i}">${esc(v.label)}</button>`).join('')}</div>` : ''}
+    </div>
+    ${(()=>{
+      const variants = s.prVariants && s.prVariants.length ? s.prVariants : (s.pr ? [{label:'自己PR', text:s.pr}] : []);
+      const cur = variants[prVariantIndex] || variants[0];
+      const text = cur ? cur.text : '';
+      return `<p class="body" style="margin-top:14px;">${text ? nl2br(text) : '<span class="muted">未入力</span>'}</p>${charCount(text)}`;
+    })()}
+  </div>
   <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
   <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p>${charCount(s.weaknesses)}</div>
