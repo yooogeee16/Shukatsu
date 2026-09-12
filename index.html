@@ -186,7 +186,7 @@
   .pr-tab:hover{color:var(--ink); border-color:var(--accent-cyan);}
   .pr-tab.active{background:var(--accent-cyan); color:#101010; border-color:var(--accent-cyan); font-weight:700;}
   #prBody{min-height:150px; transition:min-height .2s ease;}
-  #gakuBody .card{min-height:240px; transition:min-height .2s ease;}
+  #gakuBody{min-height:90px; transition:min-height .2s ease;}
   .carousel-card{min-height:210px; transition:min-height .2s ease;}
   .tag-scout{background:rgba(126,231,135,.1); color:var(--accent-lime); border:1px solid rgba(126,231,135,.3);}
   .tag-info{background:rgba(94,184,255,.1); color:var(--accent-cyan); border:1px solid rgba(94,184,255,.3);}
@@ -476,6 +476,7 @@ function renderSelf(){
       ${(s.prVariants && s.prVariants.length>1) ? `<div class="pr-tabs">${s.prVariants.map((v,i)=>`<button type="button" class="pr-tab ${i===prVariantIndex?'active':''}" data-idx="${i}">${esc(v.label)}</button>`).join('')}</div>` : ''}
     </div>
     <div id="prBody">${prBodyHtml(s)}</div>
+    <div class="char-count" id="prCharCount">${charCount(prCurrentText(s))}</div>
   </div>
   <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
@@ -485,42 +486,67 @@ function renderSelf(){
     <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">ガクチカ</h3>
     ${g.length>1 ? `<div class="pr-tabs">${g.map((item,i)=>`<button type="button" class="pr-tab gaku-tab ${i===gakuchikaIndex?'active':''}" data-idx="${i}">パターン${i+1}</button>`).join('')}</div>` : ''}
   </div>
-  <div id="gakuBody">${gakuBodyHtml(g)}</div>
+  ${gakuOuterHtml(g)}
   <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
   ${renderInterviewCarousel(s.interviewBank)}
   `;
 }
-function prBodyHtml(s){
+function prCurrentText(s){
   const variants = s.prVariants && s.prVariants.length ? s.prVariants : (s.pr ? [{label:'自己PR', text:s.pr}] : []);
   const cur = variants[prVariantIndex] || variants[0];
-  const text = cur ? cur.text : '';
-  return `<p class="body" style="margin-top:14px;">${text ? nl2br(text) : '<span class="muted">未入力</span>'}</p>${charCount(text)}`;
+  return cur ? cur.text : '';
+}
+function prBodyHtml(s){
+  const text = prCurrentText(s);
+  return `<p class="body" style="margin-top:14px;">${text ? nl2br(text) : '<span class="muted">未入力</span>'}</p>`;
 }
 function updatePR(){
   document.querySelectorAll('.pr-tab:not(.gaku-tab)').forEach(b=>{
     b.classList.toggle('active', parseInt(b.dataset.idx)===prVariantIndex);
   });
-  animateHeight(document.getElementById('prBody'), prBodyHtml(data.self || {}));
+  const s = data.self || {};
+  animateHeight(document.getElementById('prBody'), prBodyHtml(s));
+  const cc = document.getElementById('prCharCount');
+  if(cc) cc.innerHTML = charCount(prCurrentText(s));
 }
-function gakuBodyHtml(g){
-  if(!g.length) return '<div class="empty">まだ登録なし</div>';
-  const item = g[gakuchikaIndex] || g[0];
+function gakuCurrentItem(g){
+  return (g && g.length) ? (g[gakuchikaIndex] || g[0]) : null;
+}
+function gakuBodyHtml(item){
+  if(!item) return '';
+  return `<h3>${esc(item.title) || '（無題）'}</h3><p class="body">${nl2br(item.content)}</p>`;
+}
+function gakuQAHtml(item){
+  if(!item) return '';
   return `
-    <div class="card">
-      <h3>${esc(item.title) || '（無題）'}</h3>
-      <p class="body">${nl2br(item.content)}</p>${charCount(item.content)}
-      ${(item.qa && item.qa.length) ? `<div class="qa-section-title">面接での対応例</div>` : ''}
-      ${(item.qa||[]).map(qa=>`
-        <div class="qa-pair"><button type="button" class="qa-q">${esc(qa.q)}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${esc(qa.a)}</div></div></div></div>
-      `).join('')}
-    </div>
+    ${(item.qa && item.qa.length) ? `<div class="qa-section-title">面接での対応例</div>` : ''}
+    ${(item.qa||[]).map(qa=>`
+      <div class="qa-pair"><button type="button" class="qa-q">${esc(qa.q)}</button><div class="qa-wrap"><div class="qa-inner"><div class="a">${esc(qa.a)}</div></div></div></div>
+    `).join('')}
+  `;
+}
+function gakuOuterHtml(g){
+  const item = gakuCurrentItem(g);
+  if(!item) return '<div class="empty">まだ登録なし</div>';
+  return `
+  <div class="card">
+    <div id="gakuBody">${gakuBodyHtml(item)}</div>
+    <div class="char-count" id="gakuCharCount">${charCount(item.content)}</div>
+    <div id="gakuQA">${gakuQAHtml(item)}</div>
+  </div>
   `;
 }
 function updateGakuchika(){
   document.querySelectorAll('.gaku-tab').forEach(b=>{
     b.classList.toggle('active', parseInt(b.dataset.idx)===gakuchikaIndex);
   });
-  animateHeight(document.getElementById('gakuBody'), gakuBodyHtml((data.self && data.self.gakuchika) || []));
+  const item = gakuCurrentItem((data.self && data.self.gakuchika) || []);
+  if(!item) return;
+  animateHeight(document.getElementById('gakuBody'), gakuBodyHtml(item));
+  const cc = document.getElementById('gakuCharCount');
+  if(cc) cc.innerHTML = charCount(item.content);
+  const qa = document.getElementById('gakuQA');
+  if(qa) qa.innerHTML = gakuQAHtml(item);
 }
 function carouselCatMeta(item){
   const catMeta = {
