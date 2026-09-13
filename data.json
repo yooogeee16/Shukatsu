@@ -609,13 +609,13 @@
     {
       "id": "jp-labbase",
       "name": "LabBase就職",
-      "url": "https://labbase.jp/",
+      "url": "https://auth.labbase.jp/ja/signin?next=https%3A%2F%2Fcompass.labbase.jp%2Fintro%2Fpersonal",
       "tag": "逆スカウト型"
     },
     {
       "id": "jp-techoffer",
       "name": "TECH OFFER",
-      "url": "https://technoffer.jp/",
+      "url": "https://account.techocean.app/account/select?state=5d98b61808a07c3f2d95ae0292a73f02b889686bda9370f27e1107a66f92fad5&client_id=tech-offer-talent-web&response_type=code&scope=openid&code_challenge=9r86JJkWZ79jvPK9Mfz_EOugazqen-Kjr5G8XOuoIaE&auth_type=sign-in&campaign_code=f8ae6302f2&code_challenge_method=S256&redirect_uri=https%3A%2F%2Fapp.techoffer.jp%2Fauth%2Fcallback",
       "tag": "逆スカウト型"
     }
   ],
