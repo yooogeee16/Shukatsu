@@ -490,6 +490,7 @@ function renderSelf(){
   <div class="card"><h3>学歴</h3>${renderEducation(s.education)}</div>
   <div class="card"><h3>強み</h3><p class="body">${s.strengths ? nl2br(s.strengths) : '<span class="muted">未入力</span>'}</p>${charCount(s.strengths)}</div>
   <div class="card"><h3>弱み</h3><p class="body">${s.weaknesses ? nl2br(s.weaknesses) : '<span class="muted">未入力</span>'}</p>${charCount(s.weaknesses)}</div>
+  ${s.personalityType ? `<div class="card"><h3>行動性格診断</h3><div class="muted" style="margin-bottom:8px; font-weight:700; color:var(--accent-lime);">${esc(s.personalityType.type)}</div><p class="body">${nl2br(s.personalityType.description)}</p></div>` : ''}
   <div class="card"><h3>これからやってみたいこと</h3><p class="body">${s.vision ? nl2br(s.vision) : '<span class="muted">未入力</span>'}</p>${charCount(s.vision)}</div>
   <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:30px;">
     <h3 style="margin:0; font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">ガクチカ</h3>
