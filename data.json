@@ -621,6 +621,12 @@
       "name": "TECH OFFER",
       "url": "https://app.techoffer.jp/",
       "tag": "逆スカウト型"
+    },
+    {
+      "id": "jp-levtech-rookie",
+      "name": "レバテックルーキー",
+      "url": "https://rookie.levtech.jp/mypage/",
+      "tag": "逆スカウト型"
     }
   ],
   "projects": [
