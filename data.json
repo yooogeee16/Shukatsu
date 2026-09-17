@@ -559,6 +559,22 @@
       "status": "インターン参加",
       "favorite": false,
       "memo": "初任給は修士了(2025年度実績、博士了30.0万円/学部卒26.0万円)。平均年収・平均年齢は2025年3月期有価証券報告書ベース。マイページはLabBase経由の申込確認後に届いた登録用リンク（有効期限がある可能性あり、要確認）"
+    },
+    {
+      "id": "seed-sky",
+      "name": "Sky株式会社",
+      "industry": "情報処理・ソフトウェア（独立系SIer）",
+      "location": "東京都港区（東京本社）／大阪市北区（大阪本社）",
+      "careerUrl": "https://www.sky-recruit.jp/",
+      "mypageUrl": "https://axol.jp/zw/s/skygroup_28/mypage/login",
+      "salaryStart": "343000",
+      "annualSalary": "832",
+      "avgAge": "34.2",
+      "holidays": "120",
+      "holidayDetail": "土日祝休み（年2日の土曜出社日はリフレッシュデー休暇で代替）、2024年度実績で有給休暇除く120日",
+      "status": "未応募",
+      "favorite": false,
+      "memo": "初任給は大学院卒（修士課程、27卒予定、公式サイトより）。教育・医療分野向け自社ソフトウェア開発が主力。平均年収・平均年齢は2025年度実績・全社員平均（公式サイトより）"
     }
   ],
   "interns": [
