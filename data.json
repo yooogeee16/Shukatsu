@@ -275,7 +275,7 @@
     {
       "id": "seed-panasonic",
       "name": "パナソニックグループ",
-      "industry": "機械／ソフトウェア・情報処理／電気・電子機器／半導体・電子部品／家電・AV機器",
+      "industry": "総合電機メーカー",
       "mypageUrl": "",
       "salaryStart": "314000",
       "annualSalary": "956",
@@ -291,7 +291,7 @@
     {
       "id": "seed-members",
       "name": "株式会社メンバーズ",
-      "industry": "インターネット関連・Web／ソフトウェア・情報処理",
+      "industry": "Web・DX支援",
       "mypageUrl": "https://members-jobs.snar.jp/login.aspx",
       "salaryStart": "242000",
       "annualSalary": "491",
@@ -307,7 +307,7 @@
     {
       "id": "seed-asahi",
       "name": "朝日新聞社",
-      "industry": "マスコミ・新聞／メディア",
+      "industry": "新聞・メディア",
       "mypageUrl": "https://mypage.3030.i-webs.jp/asahishimbun2028/applicant/top/index/pra/bhijaebdec-bjfj",
       "salaryStart": "248730",
       "annualSalary": "1147",
@@ -323,7 +323,7 @@
     {
       "id": "seed-rank-1",
       "name": "NTTデータグループ",
-      "industry": "情報処理・ソフトウェア（SIer／ユーザー系）",
+      "industry": "SIer",
       "location": "東京都江東区豊洲（本社）",
       "mypageUrl": "",
       "salaryStart": "312000",
@@ -339,7 +339,7 @@
     {
       "id": "seed-rank-2",
       "name": "富士通",
-      "industry": "情報処理・ソフトウェア（SIer／メーカー系）",
+      "industry": "SIer・メーカー",
       "location": "神奈川県川崎市（本社）",
       "mypageUrl": "",
       "salaryStart": "315000",
@@ -355,7 +355,7 @@
     {
       "id": "seed-rank-3",
       "name": "日立製作所",
-      "industry": "情報処理・ソフトウェア（SIer／メーカー系）",
+      "industry": "SIer・メーカー",
       "location": "東京都千代田区（本社）",
       "mypageUrl": "",
       "salaryStart": "294000",
@@ -371,7 +371,7 @@
     {
       "id": "seed-rank-4",
       "name": "日本電気（NEC）",
-      "industry": "情報処理・ソフトウェア（SIer／メーカー系）",
+      "industry": "SIer・メーカー",
       "location": "東京都港区（本社）",
       "mypageUrl": "",
       "salaryStart": "299400",
@@ -387,7 +387,7 @@
     {
       "id": "seed-rank-5",
       "name": "パナソニックコネクト",
-      "industry": "情報処理・ソフトウェア（SIer／ユーザー系）",
+      "industry": "SIer・ユーザー系",
       "location": "兵庫県神戸市（本社、目安）",
       "mypageUrl": "",
       "salaryStart": "305000",
@@ -403,7 +403,7 @@
     {
       "id": "seed-rank-6",
       "name": "大塚商会",
-      "industry": "情報処理・ソフトウェア（独立系）",
+      "industry": "独立系SIer",
       "location": "東京都千代田区飯田橋（本社）",
       "mypageUrl": "",
       "salaryStart": "282000",
@@ -419,7 +419,7 @@
     {
       "id": "seed-rank-7",
       "name": "野村総合研究所（NRI）",
-      "industry": "情報処理・ソフトウェア（コンサル系）",
+      "industry": "コンサル系SIer",
       "location": "東京都千代田区大手町（本社）",
       "mypageUrl": "",
       "salaryStart": "364500",
@@ -435,7 +435,7 @@
     {
       "id": "seed-rank-8",
       "name": "日本アイ・ビー・エム（日本IBM）",
-      "industry": "情報処理・ソフトウェア（SIer／メーカー系）",
+      "industry": "SIer・メーカー",
       "location": "東京都中央区日本橋箱崎町（本社）",
       "mypageUrl": "",
       "salaryStart": "349420",
@@ -451,7 +451,7 @@
     {
       "id": "seed-rank-9",
       "name": "アクセンチュア",
-      "industry": "情報処理・ソフトウェア（コンサル系）",
+      "industry": "コンサル系SIer",
       "location": "東京都港区赤坂（本社）",
       "mypageUrl": "",
       "salaryStart": "459000",
@@ -467,7 +467,7 @@
     {
       "id": "seed-rank-10",
       "name": "富士通Japan",
-      "industry": "情報処理・ソフトウェア（SIer／メーカー系）",
+      "industry": "SIer・メーカー",
       "location": "東京都港区東新橋（本社）",
       "mypageUrl": "",
       "salaryStart": "",
@@ -483,7 +483,7 @@
     {
       "id": "seed-rank-11",
       "name": "TIS",
-      "industry": "情報処理・ソフトウェア（独立系）",
+      "industry": "独立系SIer",
       "location": "東京都新宿区西新宿（本社）",
       "mypageUrl": "",
       "salaryStart": "313900",
@@ -499,7 +499,7 @@
     {
       "id": "seed-rank-12",
       "name": "伊藤忠テクノソリューションズ（CTC）",
-      "industry": "情報処理・ソフトウェア（ユーザー系）",
+      "industry": "ユーザー系SIer",
       "location": "東京都港区（本社）",
       "mypageUrl": "",
       "salaryStart": "315100",
@@ -515,7 +515,7 @@
     {
       "id": "seed-rank-13",
       "name": "SCSK",
-      "industry": "情報処理・ソフトウェア（ユーザー系）",
+      "industry": "ユーザー系SIer",
       "location": "東京都江東区豊洲（本社）",
       "mypageUrl": "",
       "salaryStart": "340000",
@@ -531,7 +531,7 @@
     {
       "id": "seed-keyence",
       "name": "キーエンス",
-      "industry": "電気機器メーカー（FA・センサー・計測機器）",
+      "industry": "電機メーカー",
       "location": "大阪府大阪市東淀川区東中島（本社）",
       "careerUrl": "https://www.keyence-jobs.jp/",
       "mypageUrl": "",
@@ -547,7 +547,7 @@
     {
       "id": "seed-nissan",
       "name": "日産自動車",
-      "industry": "輸送用機器（自動車メーカー）",
+      "industry": "自動車メーカー",
       "location": "神奈川県横浜市西区（本社）",
       "careerUrl": "https://www.nissanmotor.jobs/japan/NE/",
       "mypageUrl": "https://nissan-career.snar.jp/login.aspx",
@@ -563,7 +563,7 @@
     {
       "id": "seed-sky",
       "name": "Sky株式会社",
-      "industry": "情報処理・ソフトウェア（独立系SIer）",
+      "industry": "独立系SIer",
       "location": "東京都港区（東京本社）／大阪市北区（大阪本社）",
       "careerUrl": "https://www.sky-recruit.jp/",
       "mypageUrl": "https://axol.jp/zw/s/skygroup_28/mypage/login",
@@ -579,7 +579,7 @@
     {
       "id": "seed-vexum",
       "name": "株式会社VEXUM",
-      "industry": "AI活用支援・BPOコンサルティング（スタートアップ）",
+      "industry": "AI・BPO支援",
       "location": "大阪府大阪市北区梅田（大阪駅前第1ビル）",
       "careerUrl": "https://vexum.co.jp/",
       "mypageUrl": "",
