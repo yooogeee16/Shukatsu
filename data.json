@@ -289,22 +289,6 @@
       "favorite": false
     },
     {
-      "id": "seed-members",
-      "name": "株式会社メンバーズ",
-      "industry": "Web・DX支援",
-      "mypageUrl": "https://members-jobs.snar.jp/login.aspx",
-      "salaryStart": "242000",
-      "annualSalary": "491",
-      "avgAge": "30",
-      "holidays": "121",
-      "holidayDetail": "完全週休2日制",
-      "status": "インターン参加",
-      "memo": "エンジニアコース（Webエンジニア／デザインエンジニア）初任給は大学院卒・大卒・高専卒・専門卒共通で24.2万円（学歴による差なし）。従業員数2,882人",
-      "location": "東京都中央区（本社）",
-      "careerUrl": "https://recruit.members.co.jp/",
-      "favorite": false
-    },
-    {
       "id": "seed-asahi",
       "name": "朝日新聞社",
       "industry": "新聞・メディア",
@@ -575,22 +559,6 @@
       "status": "未応募",
       "favorite": false,
       "memo": "初任給は大学院卒（修士課程、27卒予定、公式サイトより）。教育・医療分野向け自社ソフトウェア開発が主力。平均年収・平均年齢は2025年度実績・全社員平均（公式サイトより）"
-    },
-    {
-      "id": "seed-vexum",
-      "name": "株式会社VEXUM",
-      "industry": "AI・BPO支援",
-      "location": "大阪府大阪市北区梅田（大阪駅前第1ビル）",
-      "careerUrl": "https://vexum.co.jp/",
-      "mypageUrl": "",
-      "salaryStart": "",
-      "annualSalary": "",
-      "avgAge": "",
-      "holidays": "",
-      "holidayDetail": "",
-      "status": "選考中",
-      "favorite": false,
-      "memo": "2025年設立のスタートアップ。AI人材を企業に常駐させるBPOサービス「ARIS」を展開。少数精鋭・フラットな文化が特徴。新卒初任給等の公開データはなし（長期インターン募集中心の企業）。選考は「Selection Day」という実技型選考（ChatGPT活用課題・ケーススタディ・ロールプレイ・構造化面接・グループワーク等）"
     }
   ],
   "interns": [
@@ -632,14 +600,6 @@
       "period": "2026/09/26(土) 11:00〜18:00 JST",
       "date": "2026-09-26",
       "content": "レバテックルーキー運営主催のオンラインIT就活イベント。Zoom開催。",
-      "learning": ""
-    },
-    {
-      "id": "seed-vexum-selectionday",
-      "company": "株式会社VEXUM",
-      "period": "13:00〜16:00（3時間を通しての実施）",
-      "date": "2026-10-02",
-      "content": "Selection Day（実技型選考）。会場：大阪駅前第一ビル7階3-B（対面）。内容：ChatGPTを使用した課題・ケーススタディ・ロールプレイ・構造化面接・グループワークなど。持ち物：ノートPC、充電器、筆記用具。参加費無料、交通費・給与支給なし。",
       "learning": ""
     }
   ],
