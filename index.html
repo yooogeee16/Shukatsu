@@ -664,16 +664,18 @@ function companyRow(c){
   const salaryHigh = c.salaryStart && Number(c.salaryStart) >= 280000;
   const osakaHQ = c.location && c.location.includes('大阪');
   const holidaysHigh = c.holidays && Number(c.holidays) >= 122;
+  const annualSalaryHigh = c.annualSalary && Number(c.annualSalary) >= 800;
+  const fullWeekend = c.holidayDetail && c.holidayDetail.includes('完全週休2日制');
   return `
     <tr class="${c.favorite ? 'fav-row' : ''}">
       <td data-label="企業名">${c.favorite ? '<span class="fav-star">★</span> ' : ''}${c.careerUrl ? `<a class="company-link" href="${esc(c.careerUrl)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)}</td>
       <td data-label="業界">${esc(c.industry)}</td>
       <td data-label="本拠地" class="${osakaHQ ? 'cell-highlight' : ''}">${esc(c.location)}</td>
       <td data-label="院卒初任給(月給/円)" class="${salaryHigh ? 'cell-highlight' : ''}">${c.salaryStart ? Number(c.salaryStart).toLocaleString() : ''}</td>
-      <td data-label="平均年収(万円)">${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
+      <td data-label="平均年収(万円)" class="${annualSalaryHigh ? 'cell-highlight' : ''}">${c.annualSalary ? Number(c.annualSalary).toLocaleString() : ''}</td>
       <td data-label="平均年齢(歳)">${c.avgAge || ''}</td>
       <td data-label="年間休日(日)" class="${holidaysHigh ? 'cell-highlight' : ''}">${c.holidays || ''}</td>
-      <td data-label="休日内訳">${esc(c.holidayDetail)}</td>
+      <td data-label="休日内訳" class="${fullWeekend ? 'cell-highlight' : ''}">${esc(c.holidayDetail)}</td>
       <td data-label="選考状況">${statusPill(c.status)}</td>
       <td data-label="メモ">${esc(c.memo)}</td>
     </tr>
