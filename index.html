@@ -857,6 +857,8 @@ function renderInterviewPrep(){
   const tips = data.interviewTips || [];
   return `
   <div class="section-head"><h1>面接対策</h1><p>面接で大事なこと・想定問答集</p></div>
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.01em;">面接想定問答集</h3>
+  ${renderInterviewCarousel((data.self && data.self.interviewBank) || [])}
   ${(()=>{
     const fb = data.interviewFeedback;
     if(!fb) return '';
@@ -917,8 +919,6 @@ function renderInterviewPrep(){
     `).join('')}
   </div>
   ` : ''}
-  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
-  ${renderInterviewCarousel((data.self && data.self.interviewBank) || [])}
   `;
 }
 function renderSkill(){
