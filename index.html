@@ -125,6 +125,29 @@
   .fb-list.fb-good li::marker{color:var(--accent-lime);}
   .fb-list.fb-bad li::marker{color:var(--accent-red);}
   .fb-list.fb-action li::marker{color:var(--accent-cyan);}
+  .score-overall{display:flex; align-items:baseline; gap:4px; margin-bottom:10px;}
+  .score-overall-num{font-size:34px; font-weight:700; color:var(--accent-lime); line-height:1;}
+  .score-overall-max{font-size:13px; color:var(--ink-faint);}
+  .score-chart{display:flex; flex-direction:column; gap:10px;}
+  .score-bar-row{display:grid; grid-template-columns:160px 1fr 32px; align-items:center; gap:10px;}
+  .score-bar-label{font-size:12px; color:var(--ink-soft);}
+  .score-bar-track{background:var(--surface); border-radius:20px; height:10px; overflow:hidden;}
+  .score-bar-fill{background:linear-gradient(90deg, var(--accent-cyan), var(--accent-lime)); height:100%; border-radius:20px;}
+  .score-bar-value{font-size:13px; font-weight:700; color:var(--ink); text-align:right;}
+  .score-history-chart{display:flex; align-items:flex-end; gap:18px; padding-top:20px; min-height:160px;}
+  .score-history-col{display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; max-width:90px;}
+  .score-history-bar-wrap{width:100%; height:120px; display:flex; align-items:flex-end;}
+  .score-history-bar{
+    width:100%; background:linear-gradient(180deg, var(--accent-lime), var(--accent-cyan)); border-radius:6px 6px 0 0;
+    position:relative; display:flex; justify-content:center; min-height:4px;
+  }
+  .score-history-num{position:absolute; top:-20px; font-size:12px; font-weight:700; color:var(--accent-lime);}
+  .score-history-label{font-size:11px; color:var(--ink-soft); text-align:center; line-height:1.3;}
+  .score-history-date{font-size:10px; color:var(--ink-faint);}
+  @media (max-width:760px){
+    .score-bar-row{grid-template-columns:110px 1fr 28px;}
+    .score-bar-label{font-size:11px;}
+  }
   /* 企業名列（1列目）を横スクロールしても固定表示 */
   thead th:first-child, tbody td:first-child{
     position:sticky; left:0; z-index:2; background:var(--surface-2); border-right:1px solid var(--border);
@@ -840,13 +863,46 @@ function renderInterviewPrep(){
     return `
     <div class="card">
       <h3>AI面接練習からの気づき</h3>
+      ${(fb.overallScore!=null) ? `<div class="score-overall"><span class="score-overall-num">${fb.overallScore}</span><span class="score-overall-max">/100点</span></div>` : ''}
       <p class="body">${nl2br(fb.summary)}</p>
+      ${(fb.questionScores && fb.questionScores.length) ? `
+      <div class="qa-section-title" style="margin-top:16px;">質問別スコア</div>
+      <div class="score-chart">
+        ${fb.questionScores.map(q=>`
+          <div class="score-bar-row">
+            <span class="score-bar-label">${esc(q.label)}</span>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:${q.score}%"></div></div>
+            <span class="score-bar-value">${q.score}</span>
+          </div>
+        `).join('')}
+      </div>
+      ` : ''}
       <div class="qa-section-title" style="margin-top:16px;">評価された強み</div>
       <ul class="fb-list fb-good">${(fb.strengths||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
       <div class="qa-section-title">指摘された弱み・改善点</div>
       <ul class="fb-list fb-bad">${(fb.weaknesses||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
       ${fb.speechHabits ? `<div class="qa-section-title">話し方の癖</div><p class="body">${nl2br(fb.speechHabits)}</p>` : ''}
       ${(fb.actionItems && fb.actionItems.length) ? `<div class="qa-section-title">今後の対策</div><ul class="fb-list fb-action">${fb.actionItems.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+    </div>
+    `;
+  })()}
+  ${(()=>{
+    const hist = data.interviewScoreHistory || [];
+    if(!hist.length) return '';
+    const max = Math.max(...hist.map(h=>h.score), 100);
+    return `
+    <div class="card">
+      <h3>面接練習スコアの推移</h3>
+      <div class="score-history-chart">
+        ${hist.map(h=>`
+          <div class="score-history-col">
+            <div class="score-history-bar-wrap"><div class="score-history-bar" style="height:${(h.score/max*100).toFixed(0)}%"><span class="score-history-num">${h.score}</span></div></div>
+            <span class="score-history-label">${esc(h.label)}</span>
+            <span class="score-history-date">${esc(h.date)}</span>
+          </div>
+        `).join('')}
+      </div>
+      <p class="muted" style="margin-top:12px; font-size:12px;">練習するたびにここに記録していくと、伸びが分かるようになる。</p>
     </div>
     `;
   })()}
