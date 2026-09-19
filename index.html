@@ -117,6 +117,9 @@
   .co-detail-row:last-child{margin-bottom:0;}
   .co-detail-label{display:block; font-size:11px; font-weight:700; color:var(--accent-cyan); margin-bottom:4px; letter-spacing:0.03em;}
   .co-detail-row p{margin:0; font-size:13px; color:#c9d1d8; line-height:1.7;}
+  .tip-row{padding:12px 0; border-bottom:1px solid var(--border-soft);}
+  .tip-row:last-child{border-bottom:none; padding-bottom:0;}
+  .tip-title{font-size:14px; font-weight:700; color:var(--accent-lime); margin-bottom:6px;}
   /* 企業名列（1列目）を横スクロールしても固定表示 */
   thead th:first-child, tbody td:first-child{
     position:sticky; left:0; z-index:2; background:var(--surface-2); border-right:1px solid var(--border);
@@ -300,6 +303,7 @@
     <button class="tab-btn" data-tab="company">企業一覧</button>
     <button class="tab-btn" data-tab="intern">インターン</button>
     <button class="tab-btn" data-tab="skill">資格・経験</button>
+    <button class="tab-btn" data-tab="interview">面接対策</button>
     <button class="tab-btn" data-tab="calendar">カレンダー</button>
   </div>
   <div class="main" id="main"><div class="empty">読み込み中…</div></div>
@@ -451,6 +455,7 @@ function render(skipAnim){
   else if(currentTab==='company') main.innerHTML = renderCompany();
   else if(currentTab==='intern') main.innerHTML = renderIntern();
   else if(currentTab==='skill') main.innerHTML = renderSkill();
+  else if(currentTab==='interview') main.innerHTML = renderInterviewPrep();
   else if(currentTab==='calendar') main.innerHTML = renderCalendar();
   if(!skipAnim){
     main.classList.remove('fade-out');
@@ -521,8 +526,6 @@ function renderSelf(){
     ${g.length>1 ? `<div class="pr-tabs">${g.map((item,i)=>`<button type="button" class="pr-tab gaku-tab ${i===gakuchikaIndex?'active':''}" data-idx="${i}">パターン${i+1}</button>`).join('')}</div>` : ''}
   </div>
   ${gakuOuterHtml(g)}
-  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
-  ${renderInterviewCarousel(s.interviewBank)}
   `;
 }
 function prCurrentText(s){
@@ -820,6 +823,25 @@ function renderIntern(){
   `;
 }
 
+function renderInterviewPrep(){
+  const tips = data.interviewTips || [];
+  return `
+  <div class="section-head"><h1>面接対策</h1><p>面接で大事なこと・想定問答集</p></div>
+  ${tips.length ? `
+  <div class="card">
+    <h3>面接で大事なこと</h3>
+    ${tips.map(t=>`
+      <div class="tip-row">
+        <div class="tip-title">${esc(t.title)}</div>
+        <p class="body">${nl2br(t.note)}</p>
+      </div>
+    `).join('')}
+  </div>
+  ` : ''}
+  <h3 style="font-size:16px; font-weight:700; color:var(--ink); margin-top:30px; letter-spacing:-0.01em;">面接想定問答集</h3>
+  ${renderInterviewCarousel((data.self && data.self.interviewBank) || [])}
+  `;
+}
 function renderSkill(){
   const quals = data.quals || [];
   const acts = data.activities || [];
