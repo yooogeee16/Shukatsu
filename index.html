@@ -120,6 +120,11 @@
   .tip-row{padding:12px 0; border-bottom:1px solid var(--border-soft);}
   .tip-row:last-child{border-bottom:none; padding-bottom:0;}
   .tip-title{font-size:14px; font-weight:700; color:var(--accent-lime); margin-bottom:6px;}
+  .fb-list{margin:0 0 4px; padding-left:20px;}
+  .fb-list li{font-size:13px; color:#c9d1d8; line-height:1.7; margin-bottom:6px;}
+  .fb-list.fb-good li::marker{color:var(--accent-lime);}
+  .fb-list.fb-bad li::marker{color:var(--accent-red);}
+  .fb-list.fb-action li::marker{color:var(--accent-cyan);}
   /* 企業名列（1列目）を横スクロールしても固定表示 */
   thead th:first-child, tbody td:first-child{
     position:sticky; left:0; z-index:2; background:var(--surface-2); border-right:1px solid var(--border);
@@ -829,6 +834,22 @@ function renderInterviewPrep(){
   const tips = data.interviewTips || [];
   return `
   <div class="section-head"><h1>面接対策</h1><p>面接で大事なこと・想定問答集</p></div>
+  ${(()=>{
+    const fb = data.interviewFeedback;
+    if(!fb) return '';
+    return `
+    <div class="card">
+      <h3>AI面接練習からの気づき</h3>
+      <p class="body">${nl2br(fb.summary)}</p>
+      <div class="qa-section-title" style="margin-top:16px;">評価された強み</div>
+      <ul class="fb-list fb-good">${(fb.strengths||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+      <div class="qa-section-title">指摘された弱み・改善点</div>
+      <ul class="fb-list fb-bad">${(fb.weaknesses||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+      ${fb.speechHabits ? `<div class="qa-section-title">話し方の癖</div><p class="body">${nl2br(fb.speechHabits)}</p>` : ''}
+      ${(fb.actionItems && fb.actionItems.length) ? `<div class="qa-section-title">今後の対策</div><ul class="fb-list fb-action">${fb.actionItems.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+    </div>
+    `;
+  })()}
   ${tips.length ? `
   <div class="card">
     <h3>面接で大事なこと</h3>
