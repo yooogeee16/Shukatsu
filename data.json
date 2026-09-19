@@ -1043,6 +1043,12 @@
       "name": "Renewインターン",
       "url": "https://renew-career.com/login",
       "tag": "逆スカウト型"
+    },
+    {
+      "id": "jp-casematch",
+      "name": "CaseMatch（ケースマッチ）",
+      "url": "https://casematch.jp/home/",
+      "tag": "逆スカウト型"
     }
   ],
   "projects": [
