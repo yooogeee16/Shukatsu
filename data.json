@@ -1049,6 +1049,12 @@
       "name": "CaseMatch（ケースマッチ）",
       "url": "https://casematch.jp/home/",
       "tag": "逆スカウト型"
+    },
+    {
+      "id": "jp-userlocal-interview",
+      "name": "就活面接練習AI（ユーザーローカル）",
+      "url": "https://ai-tool.userlocal.jp/interview_ai",
+      "tag": "面接対策ツール"
     }
   ],
   "projects": [
