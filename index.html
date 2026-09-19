@@ -658,6 +658,7 @@ function renderResearch(){
   <div class="card"><h3>研究の意義</h3><p class="body">${nl2br(r.significance)}</p>${charCount(r.significance)}</div>
   <div class="card"><h3>研究を選んだ理由</h3><p class="body">${nl2br(r.reason)}</p>${charCount(r.reason)}</div>
   <div class="card"><h3>研究から学んだこと</h3><p class="body">${nl2br(r.learned)}</p>${charCount(r.learned)}</div>
+  ${r.future ? `<div class="card"><h3>今後の展望</h3><p class="body">${nl2br(r.future)}</p>${charCount(r.future)}</div>` : ''}
   `;
 }
 function renderIndustry(){
