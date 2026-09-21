@@ -943,8 +943,8 @@ function renderSkill(){
   ${(data.projects||[]).length===0 ? '<div class="empty">まだ登録なし</div>' : data.projects.map(p=>`
     <div class="card" style="${p.highlight?'border-color:var(--accent-lime);':''}">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-        <h3><a href="${esc(p.url)}" target="_blank" rel="noopener" class="company-link">${esc(p.name)}</a></h3>
-        ${p.highlight ? `<span class="qual-note" style="color:var(--accent-lime); border-color:rgba(126,231,135,.3); background:rgba(126,231,135,.08);">自己PRで言及</span>` : ''}
+        <h3>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener" class="company-link">${esc(p.name)}</a>` : esc(p.name)}</h3>
+        ${p.highlight ? `<span class="qual-note" style="color:var(--accent-lime); border-color:rgba(126,231,135,.3); background:rgba(126,231,135,.08);">実際に活用中</span>` : ''}
       </div>
       <div class="muted" style="margin-bottom:8px;">${esc(p.tech)}</div>
       <p class="body">${nl2br(p.desc)}</p>
